@@ -1,0 +1,80 @@
+body{
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #fff8f0;
+  margin:0;
+  padding:0;
+}
+.app-container{
+  max-width: 900px;
+  margin:auto;
+  padding:10px;
+}
+.banner{
+  text-align:center;
+  background:#ffe5d9;
+  padding:20px;
+  border-bottom:3px solid #ff7f50;
+}
+.lang-select button{
+  margin:0 5px;
+  padding:5px 10px;
+  cursor:pointer;
+}
+.lang-select .active{
+  background:#ff7f50;
+  color:white;
+}
+.table-select input{
+  width:100%;
+  padding:8px;
+  margin:10px 0;
+}
+.category-select button{
+  margin:3px;
+  padding:5px 10px;
+  cursor:pointer;
+}
+.category-select .active{
+  background:#ff7f50;
+  color:white;
+}
+.menu-list{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+}
+.menu-item{
+  border:1px solid #ffdab9;
+  padding:10px;
+  flex:1 1 45%;
+  background:white;
+}
+.menu-item button{
+  margin-top:5px;
+  padding:5px 10px;
+  background:#ff7f50;
+  color:white;
+  border:none;
+  cursor:pointer;
+}
+.cart{
+  margin-top:20px;
+  padding:10px;
+  border:2px solid #ff7f50;
+  background:#fff0e0;
+}
+.cart-item{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:5px;
+}
+.order-btn{
+  margin-top:10px;
+  padding:10px;
+  width:100%;
+  background:#ff7f50;
+  color:white;
+  border:none;
+  cursor:pointer;
+  font-size:1rem;
+}
