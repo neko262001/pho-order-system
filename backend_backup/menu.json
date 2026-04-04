@@ -1,0 +1,458 @@
+[
+  {
+    "id": 1,
+    "category": "spicy",
+    "featured": true,
+    "available": true,
+    "sortOrder": 1,
+    "name_vi": "Mỳ cay thập cẩm",
+    "name_zh": "豪華部隊鍋",
+    "name_en": "Luxury Mixed Spicy Pot",
+    "price": 210,
+    "image": "/images/my-cay-thap-cam.jpg",
+    "description_vi": "Hải sản + thịt + sò điệp",
+    "description_zh": "海鮮 + 肉 + 干貝",
+    "description_en": "Seafood + meat + scallop",
+    "options": {
+      "spicyLevel": true,
+      "phoType": false
+    }
+  },
+  {
+    "id": 2,
+    "category": "spicy",
+    "featured": true,
+    "available": true,
+    "sortOrder": 2,
+    "name_vi": "Mỳ cay hải sản",
+    "name_zh": "海鮮部隊鍋",
+    "name_en": "Seafood Spicy Pot",
+    "price": 170,
+    "image": "/images/my-cay-hai-san.jpg",
+    "description_vi": "Mực, 2 con tôm, bắp cải tím, xúc xích, cá viên, bò viên, bánh gạo, nấm kim châm, bông cải, kimchi",
+    "description_zh": "花枝，2隻蝦，紫色甘藍，熱狗3片，魚丸1，貢丸2-3片，年糕2，金針菇，花椰菜1，泡菜",
+    "description_en": "Squid, 2 shrimps, purple cabbage, sausage, fish ball, beef ball, rice cake, enoki, broccoli, kimchi",
+    "options": {
+      "spicyLevel": true,
+      "phoType": false
+    }
+  },
+  {
+    "id": 3,
+    "category": "spicy",
+    "featured": false,
+    "available": true,
+    "sortOrder": 3,
+    "name_vi": "Mỳ cay heo",
+    "name_zh": "豬肉部隊鍋",
+    "name_en": "Pork Spicy Pot",
+    "price": 170,
+    "image": "/images/my-cay-heo.jpg",
+    "description_vi": "Heo lát, bắp cải tím, xúc xích, cá viên, bò viên, bánh gạo, nấm kim châm, bông cải, kimchi",
+    "description_zh": "豬肉片4，紫色甘藍，熱狗3片，魚丸1，貢丸2-3片，年糕2，金針菇，花椰菜1，泡菜",
+    "description_en": "Pork slices, purple cabbage, sausage, fish ball, beef ball, rice cake, enoki, broccoli, kimchi",
+    "options": {
+      "spicyLevel": true,
+      "phoType": false
+    }
+  },
+  {
+    "id": 4,
+    "category": "spicy",
+    "featured": false,
+    "available": true,
+    "sortOrder": 4,
+    "name_vi": "Mỳ cay bò",
+    "name_zh": "牛肉部隊鍋",
+    "name_en": "Beef Spicy Pot",
+    "price": 150,
+    "image": "/images/my-cay-bo.jpg",
+    "description_vi": "Mỳ cay vị bò",
+    "description_zh": "牛肉部隊鍋",
+    "description_en": "Beef spicy pot",
+    "options": {
+      "spicyLevel": true,
+      "phoType": false
+    }
+  },
+  {
+    "id": 5,
+    "category": "pho",
+    "featured": true,
+    "available": true,
+    "sortOrder": 5,
+    "name_vi": "Phở bò tái",
+    "name_zh": "手沖牛肉河粉",
+    "name_en": "Rare Beef Pho",
+    "price": 150,
+    "image": "/images/pho-bo-tai.jpg",
+    "description_vi": "Phở bò tái",
+    "description_zh": "手沖牛肉河粉",
+    "description_en": "Rare beef pho",
+    "options": {
+      "spicyLevel": false,
+      "phoType": true
+    }
+  },
+  {
+    "id": 6,
+    "category": "pho",
+    "featured": false,
+    "available": true,
+    "sortOrder": 6,
+    "name_vi": "Phở gà",
+    "name_zh": "雞肉河粉",
+    "name_en": "Chicken Pho",
+    "price": 150,
+    "image": "/images/pho-ga.jpg",
+    "description_vi": "Phở gà",
+    "description_zh": "雞肉河粉",
+    "description_en": "Chicken pho",
+    "options": {
+      "spicyLevel": false,
+      "phoType": false
+    }
+  },
+  {
+    "id": 7,
+    "category": "pho",
+    "featured": true,
+    "available": true,
+    "sortOrder": 7,
+    "name_vi": "Phở bò thập cẩm",
+    "name_zh": "綜合牛肉河粉",
+    "name_en": "Mixed Beef Pho",
+    "price": 200,
+    "image": "/images/pho-bo-thap-cam.jpg",
+    "description_vi": "Phở bò thập cẩm",
+    "description_zh": "綜合牛肉河粉",
+    "description_en": "Mixed beef pho",
+    "options": {
+      "spicyLevel": false,
+      "phoType": true
+    }
+  },
+  {
+    "id": 8,
+    "category": "rice",
+    "featured": true,
+    "available": true,
+    "sortOrder": 8,
+    "name_vi": "Cơm rang dưa bò",
+    "name_zh": "牛肉酸菜炒飯",
+    "name_en": "Beef Pickle Fried Rice",
+    "price": 120,
+    "image": "/images/com-rang-dua-bo.jpg",
+    "description_vi": "Cơm rang dưa bò",
+    "description_zh": "牛肉酸菜炒飯",
+    "description_en": "Fried rice with beef and pickles",
+    "options": {
+      "spicyLevel": false,
+      "phoType": false
+    }
+  },
+  {
+    "id": 9,
+    "category": "rice",
+    "featured": true,
+    "available": true,
+    "sortOrder": 9,
+    "name_vi": "Cơm sườn",
+    "name_zh": "排骨飯",
+    "name_en": "Pork Chop Rice",
+    "price": 150,
+    "image": "/images/com-suon.jpg",
+    "description_vi": "Cơm sườn",
+    "description_zh": "排骨飯",
+    "description_en": "Pork chop rice",
+    "options": {
+      "spicyLevel": false,
+      "phoType": false
+    }
+  },
+  {
+    "id": 10,
+    "category": "tea",
+    "featured": false,
+    "available": true,
+    "sortOrder": 10,
+    "name_vi": "Trà nhãn",
+    "name_zh": "龍眼果茶",
+    "name_en": "Longan Fruit Tea",
+    "price": 75,
+    "image": "/images/tra-nhan.jpg",
+    "description_vi": "Trà nhãn",
+    "description_zh": "龍眼果茶",
+    "description_en": "Longan fruit tea",
+    "options": {
+      "spicyLevel": false,
+      "phoType": false
+    }
+  },
+  {
+    "id": 11,
+    "category": "tea",
+    "featured": false,
+    "available": false,
+    "sortOrder": 11,
+    "name_vi": "Trà ổi",
+    "name_zh": "暫時沒有",
+    "name_en": "Guava Tea",
+    "price": 75,
+    "image": "/images/tra-oi.jpg",
+    "description_vi": "Tạm hết",
+    "description_zh": "暫時沒有",
+    "description_en": "Sold out",
+    "options": {
+      "spicyLevel": false,
+      "phoType": false
+    }
+  },
+  {
+    "id": 12,
+    "category": "tea",
+    "featured": false,
+    "available": true,
+    "sortOrder": 12,
+    "name_vi": "Trà dưa lưới",
+    "name_zh": "哈密瓜果茶",
+    "name_en": "Melon Fruit Tea",
+    "price": 90,
+    "image": "/images/tra-dua-luoi.jpg",
+    "description_vi": "Trà dưa lưới",
+    "description_zh": "哈密瓜果茶",
+    "description_en": "Melon fruit tea",
+    "options": {
+      "spicyLevel": false,
+      "phoType": false
+    }
+  },
+  {
+    "id": 13,
+    "category": "tea",
+    "featured": true,
+    "available": true,
+    "sortOrder": 13,
+    "name_vi": "Trà dâu tây",
+    "name_zh": "草莓果茶",
+    "name_en": "Strawberry Fruit Tea",
+    "price": 100,
+    "image": "/images/tra-dau-tay.jpg",
+    "description_vi": "Theo mùa",
+    "description_zh": "季節限定",
+    "description_en": "Seasonal",
+    "options": {
+      "spicyLevel": false,
+      "phoType": false
+    }
+  },
+  {
+    "id": 14,
+    "category": "tea",
+    "featured": false,
+    "available": true,
+    "sortOrder": 14,
+    "name_vi": "Trà xoài chanh dây",
+    "name_zh": "百香芒芒果茶",
+    "name_en": "Mango Passion Fruit Tea",
+    "price": 75,
+    "image": "/images/tra-xoai-chanh-day.jpg",
+    "description_vi": "Trà xoài chanh dây",
+    "description_zh": "百香芒芒果茶",
+    "description_en": "Mango passion fruit tea",
+    "options": {
+      "spicyLevel": false,
+      "phoType": false
+    }
+  },
+  {
+    "id": 15,
+    "category": "tea",
+    "featured": false,
+    "available": true,
+    "sortOrder": 15,
+    "name_vi": "Trà đào",
+    "name_zh": "水蜜桃果茶",
+    "name_en": "Peach Fruit Tea",
+    "price": 75,
+    "image": "/images/tra-dao.jpg",
+    "description_vi": "Trà đào",
+    "description_zh": "水蜜桃果茶",
+    "description_en": "Peach fruit tea",
+    "options": {
+      "spicyLevel": false,
+      "phoType": false
+    }
+  },
+  {
+    "id": 16,
+    "category": "tea",
+    "featured": true,
+    "available": true,
+    "sortOrder": 16,
+    "name_vi": "Trà trái cây nhiệt đới",
+    "name_zh": "綜合水果茶",
+    "name_en": "Tropical Fruit Tea",
+    "price": 75,
+    "image": "/images/tra-trai-cay-nhiet-doi.jpg",
+    "description_vi": "Trà trái cây nhiệt đới",
+    "description_zh": "綜合水果茶",
+    "description_en": "Mixed tropical fruit tea",
+    "options": {
+      "spicyLevel": false,
+      "phoType": false
+    }
+  },
+  {
+    "id": 17,
+    "category": "fried",
+    "featured": true,
+    "available": true,
+    "sortOrder": 17,
+    "name_vi": "Combo đồ rán",
+    "name_zh": "炸物拼盤",
+    "name_en": "Fried Combo Platter",
+    "price": 200,
+    "image": "/images/combo-do-ran.jpg",
+    "description_vi": "Combo đồ rán",
+    "description_zh": "炸物拼盤",
+    "description_en": "Fried platter combo",
+    "options": {
+      "spicyLevel": false,
+      "phoType": false
+    }
+  },
+  {
+    "id": 18,
+    "category": "fried",
+    "featured": false,
+    "available": true,
+    "sortOrder": 18,
+    "name_vi": "QQ que",
+    "name_zh": "QQ棒",
+    "name_en": "QQ Stick",
+    "price": 50,
+    "image": "/images/qq-que.jpg",
+    "description_vi": "Món này ngon nè",
+    "description_zh": "這個很好吃",
+    "description_en": "Very tasty",
+    "options": {
+      "spicyLevel": false,
+      "phoType": false
+    }
+  },
+  {
+    "id": 19,
+    "category": "fried",
+    "featured": false,
+    "available": true,
+    "sortOrder": 19,
+    "name_vi": "Tempura",
+    "name_zh": "甜不辣",
+    "name_en": "Tempura",
+    "price": 35,
+    "image": "/images/tempura.jpg",
+    "description_vi": "Tempura",
+    "description_zh": "甜不辣",
+    "description_en": "Tempura",
+    "options": {
+      "spicyLevel": false,
+      "phoType": false
+    }
+  },
+  {
+    "id": 20,
+    "category": "fried",
+    "featured": false,
+    "available": true,
+    "sortOrder": 20,
+    "name_vi": "Bánh bao chiên / bánh mì ngọt",
+    "name_zh": "銀絲卷",
+    "name_en": "Silver Thread Roll",
+    "price": 50,
+    "image": "/images/banh-bao-chien.jpg",
+    "description_vi": "Bánh mì / bánh bao",
+    "description_zh": "銀絲卷",
+    "description_en": "Sweet bun roll",
+    "options": {
+      "spicyLevel": false,
+      "phoType": false
+    }
+  },
+  {
+    "id": 21,
+    "category": "fried",
+    "featured": false,
+    "available": true,
+    "sortOrder": 21,
+    "name_vi": "Khoai tây chiên",
+    "name_zh": "黃金薯條",
+    "name_en": "French Fries",
+    "price": 45,
+    "image": "/images/khoai-tay-chien.jpg",
+    "description_vi": "Khoai tây chiên",
+    "description_zh": "黃金薯條",
+    "description_en": "French fries",
+    "options": {
+      "spicyLevel": false,
+      "phoType": false
+    }
+  },
+  {
+    "id": 22,
+    "category": "fried",
+    "featured": false,
+    "available": true,
+    "sortOrder": 22,
+    "name_vi": "Gà viên",
+    "name_zh": "麥克雞塊",
+    "name_en": "Chicken Nuggets",
+    "price": 45,
+    "image": "/images/ga-vien.jpg",
+    "description_vi": "Gà viên kiểu McDonald",
+    "description_zh": "麥克雞塊",
+    "description_en": "Chicken nuggets",
+    "options": {
+      "spicyLevel": false,
+      "phoType": false
+    }
+  },
+  {
+    "id": 23,
+    "category": "fried",
+    "featured": true,
+    "available": true,
+    "sortOrder": 23,
+    "name_vi": "Gà rán kiểu Karaage",
+    "name_zh": "唐揚雞",
+    "name_en": "Karaage Chicken",
+    "price": 50,
+    "image": "/images/ga-ran-karaage.jpg",
+    "description_vi": "Món này ngon",
+    "description_zh": "很好吃",
+    "description_en": "Very tasty",
+    "options": {
+      "spicyLevel": false,
+      "phoType": false
+    }
+  },
+  {
+    "id": 24,
+    "category": "fried",
+    "featured": false,
+    "available": true,
+    "sortOrder": 24,
+    "name_vi": "Hành tây rán",
+    "name_zh": "洋蔥圈",
+    "name_en": "Onion Rings",
+    "price": 45,
+    "image": "/images/hanh-tay-ran.jpg",
+    "description_vi": "Hành tây rán",
+    "description_zh": "洋蔥圈",
+    "description_en": "Onion rings",
+    "options": {
+      "spicyLevel": false,
+      "phoType": false
+    }
+  }
+]
