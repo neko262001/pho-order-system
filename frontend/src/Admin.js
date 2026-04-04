@@ -20,7 +20,8 @@ const emptyForm = {
 
 import React, { useState, useEffect } from "react";
 
-function Admin() { 
+function Admin() {
+    alert("ADMIN NEW VERSION"); 
     const pass = prompt("Nhập mật khẩu admin:");
     if (pass !== "0903636778") {
       alert("Sai mật khẩu");
