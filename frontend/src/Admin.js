@@ -18,16 +18,16 @@ const emptyForm = {
   options: { spicyLevel: false, phoType: false }
 };
 
-import React, { useState, useEffect } from "react";
-
 function Admin() {
-    alert("ADMIN NEW VERSION"); 
+  if (!window.__ADMIN_OK__) {
     const pass = prompt("Nhập mật khẩu admin:");
+
     if (pass !== "0903636778") {
       alert("Sai mật khẩu");
       window.location.href = "/";
       return null;
     }
+
     window.__ADMIN_OK__ = true;
   }
 
