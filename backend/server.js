@@ -19,6 +19,7 @@ const DATA_DIR = __dirname;
 const MENU_FILE = path.join(DATA_DIR, "menu.json");
 const ORDERS_FILE = path.join(DATA_DIR, "orders.json");
 const UPLOAD_DIR = path.join(DATA_DIR, "uploads");
+const COMMUNITY_FILE = path.join(DATA_DIR, "community.json");
 
 if (!fs.existsSync(UPLOAD_DIR)) {
   fs.mkdirSync(UPLOAD_DIR, { recursive: true });
@@ -26,6 +27,23 @@ if (!fs.existsSync(UPLOAD_DIR)) {
 
 if (!fs.existsSync(MENU_FILE)) {
   fs.writeFileSync(MENU_FILE, "[]", "utf-8");
+}
+
+if (!fs.existsSync(COMMUNITY_FILE)) {
+  fs.writeFileSync(
+    COMMUNITY_FILE,
+    JSON.stringify(
+      {
+        dailyBase: 10,
+        dailyFreeAvailable: 10,
+        totalSponsored: 0,
+        lastResetDate: new Date().toISOString().slice(0, 10)
+      },
+      null,
+      2
+    ),
+    "utf-8"
+  );
 }
 
 if (!fs.existsSync(ORDERS_FILE)) {
@@ -45,6 +63,56 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage });
+
+function getTodayLocalDateString() {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  const day = String(now.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+function normalizeCommunityState() {
+  const fallback = {
+    dailyBase: 10,
+    dailyFreeAvailable: 10,
+    totalSponsored: 0,
+    lastResetDate: getTodayLocalDateString()
+  };
+
+  const state = readJson(COMMUNITY_FILE, fallback);
+
+  return {
+    dailyBase: Number(state.dailyBase) || 10,
+    dailyFreeAvailable: Number(state.dailyFreeAvailable) || 0,
+    totalSponsored: Number(state.totalSponsored) || 0,
+    lastResetDate: state.lastResetDate || getTodayLocalDateString()
+  };
+}
+
+function ensureCommunityDailyReset() {
+  const state = normalizeCommunityState();
+  const today = getTodayLocalDateString();
+
+  if (state.lastResetDate !== today) {
+    if (state.dailyFreeAvailable < state.dailyBase) {
+      state.dailyFreeAvailable = state.dailyBase;
+    }
+    state.lastResetDate = today;
+    writeJson(COMMUNITY_FILE, state);
+  }
+
+  return state;
+}
+
+function saveCommunityState(state) {
+  writeJson(COMMUNITY_FILE, {
+    dailyBase: Number(state.dailyBase) || 10,
+    dailyFreeAvailable: Number(state.dailyFreeAvailable) || 0,
+    totalSponsored: Number(state.totalSponsored) || 0,
+    lastResetDate: state.lastResetDate || getTodayLocalDateString()
+  });
+}
 
 function readJson(file, fallback) {
   try {
@@ -75,6 +143,98 @@ app.get("/api/menu", (req, res) => {
   const menu = readJson(MENU_FILE, []);
   const sorted = [...menu].sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
   res.json(sorted);
+});
+
+app.get("/api/community-status", (req, res) => {
+  try {
+    const state = ensureCommunityDailyReset();
+    res.json({
+      success: true,
+      dailyBase: state.dailyBase,
+      dailyFreeAvailable: state.dailyFreeAvailable,
+      totalSponsored: state.totalSponsored,
+      lastResetDate: state.lastResetDate
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      dailyBase: 10,
+      dailyFreeAvailable: 10,
+      totalSponsored: 0,
+      lastResetDate: getTodayLocalDateString()
+    });
+  }
+});
+
+app.post("/api/community/free", async (req, res) => {
+  try {
+    const { table, qty } = req.body;
+    const requestedQty = Number(qty) || 1;
+
+    if (!table) {
+      return res.status(400).json({ success: false, message: "Thiếu số bàn" });
+    }
+
+    if (requestedQty <= 0) {
+      return res.status(400).json({ success: false, message: "Số lượng không hợp lệ" });
+    }
+
+    const state = ensureCommunityDailyReset();
+
+    if (state.dailyFreeAvailable < requestedQty) {
+      return res.status(400).json({
+        success: false,
+        message: "Hôm nay đã hết hoặc không đủ suất phở miễn phí",
+        dailyFreeAvailable: state.dailyFreeAvailable
+      });
+    }
+
+    state.dailyFreeAvailable -= requestedQty;
+    saveCommunityState(state);
+
+    const orders = readJson(ORDERS_FILE, []);
+    orders.unshift({
+      id: Date.now(),
+      table,
+      items: [{
+        name: "Phở bò miễn phí hôm nay",
+        name_vi: "Phở bò miễn phí hôm nay",
+        name_en: "Today's Free Beef Pho",
+        name_zh: "今日免費牛肉河粉",
+        qty: requestedQty,
+        price: 0,
+        type: "community_free"
+      }],
+      total: 0,
+      status: "new",
+      orderType: "community_free",
+      createdAt: new Date().toISOString()
+    });
+    writeJson(ORDERS_FILE, orders);
+
+    if (TELEGRAM_TOKEN && CHAT_ID) {
+      const message = [
+        "🎁 Suất phở miễn phí",
+        `Bàn: ${table}`,
+        `Số lượng: ${requestedQty}`,
+        `Còn lại hôm nay: ${state.dailyFreeAvailable}`
+      ].join("\n");
+
+      await axios.post(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
+        chat_id: CHAT_ID,
+        text: message
+      });
+    }
+
+    res.json({
+      success: true,
+      message: "Đã nhận suất phở miễn phí",
+      dailyFreeAvailable: state.dailyFreeAvailable,
+      totalSponsored: state.totalSponsored
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Không thể nhận suất miễn phí lúc này" });
+  }
 });
 
 app.post("/api/upload", checkAdmin, upload.single("image"), (req, res) => {
@@ -179,6 +339,91 @@ app.delete("/api/menu/:id", checkAdmin, (req, res) => {
   } catch (error) {
     console.log("DELETE /api/menu/:id ERROR:", error.message);
     res.status(500).json({ success: false, message: "Cannot delete menu item" });
+  }
+});
+
+app.post("/api/community/sponsor", async (req, res) => {
+  try {
+    const { table, qty, pricePerBowl } = req.body;
+    const requestedQty = Number(qty) || 1;
+    const unitPrice = Number(pricePerBowl) || 150;
+
+    if (!table) {
+      return res.status(400).json({ success: false, message: "Thiếu số bàn" });
+    }
+
+    if (requestedQty <= 0) {
+      return res.status(400).json({ success: false, message: "Số lượng không hợp lệ" });
+    }
+
+    const state = ensureCommunityDailyReset();
+    state.dailyFreeAvailable += requestedQty;
+    state.totalSponsored += requestedQty;
+    saveCommunityState(state);
+
+    const total = requestedQty * unitPrice;
+
+    const orders = readJson(ORDERS_FILE, []);
+    orders.unshift({
+      id: Date.now(),
+      table,
+      items: [{
+        name: "Mời 1 tô phở miễn phí",
+        name_vi: "Mời 1 tô phở miễn phí",
+        name_en: "Sponsor 1 Free Bowl of Pho",
+        name_zh: "贊助一碗免費河粉",
+        qty: requestedQty,
+        price: unitPrice,
+        type: "community_sponsor"
+      }],
+      total,
+      status: "new",
+      orderType: "community_sponsor",
+      createdAt: new Date().toISOString()
+    });
+    writeJson(ORDERS_FILE, orders);
+
+    if (TELEGRAM_TOKEN && CHAT_ID) {
+      const message = [
+        "❤️ Mời phở cộng đồng",
+        `Bàn: ${table}`,
+        `Số lượng mời: ${requestedQty}`,
+        `Quỹ miễn phí tăng thêm: ${requestedQty}`,
+        `Còn lại hôm nay: ${state.dailyFreeAvailable}`,
+        `Tổng tô đã được mời: ${state.totalSponsored}`,
+        `Tổng tiền: ${total} NT$`
+      ].join("\n");
+
+      await axios.post(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
+        chat_id: CHAT_ID,
+        text: message
+      });
+    }
+
+    res.json({
+      success: true,
+      message: "Cảm ơn bạn đã mời phở cộng đồng",
+      dailyFreeAvailable: state.dailyFreeAvailable,
+      totalSponsored: state.totalSponsored,
+      total
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Không thể mời tô phở lúc này" });
+  }
+});
+
+app.get("/api/community/admin", checkAdmin, (req, res) => {
+  try {
+    const state = ensureCommunityDailyReset();
+    res.json({
+      success: true,
+      dailyBase: state.dailyBase,
+      dailyFreeAvailable: state.dailyFreeAvailable,
+      totalSponsored: state.totalSponsored,
+      lastResetDate: state.lastResetDate
+    });
+  } catch (error) {
+    res.status(500).json({ success: false });
   }
 });
 
