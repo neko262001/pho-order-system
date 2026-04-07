@@ -130,6 +130,13 @@ function App() {
   const [menu, setMenu] = useState([]);
   const [cart, setCart] = useState([]);
   const [optionModalOpen, setOptionModalOpen] = useState(false);
+  const [communityStatus, setCommunityStatus] = useState({
+  dailyBase: 10,
+  dailyFreeAvailable: 10,
+  totalSponsored: 0,
+  lastResetDate: ""
+});
+const [communityLoading, setCommunityLoading] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const [selectedSpicyLevel, setSelectedSpicyLevel] = useState(1);
   const [selectedPhoType, setSelectedPhoType] = useState("");
@@ -139,7 +146,157 @@ function App() {
 
   const t = TEXT[lang];
 
+const communityText = {
+  freeTitle: lang === "vi" ? "Phở miễn phí hôm nay"
+    : lang === "zh" ? "今日免費牛肉河粉"
+    : "Today's Free Pho",
+
+  freeDesc: lang === "vi" ? "Dành cho người cần giúp đỡ"
+    : lang === "zh" ? "提供給需要的人"
+    : "For people in need",
+
+  freeRemaining: lang === "vi" ? "Còn lại:"
+    : lang === "zh" ? "剩餘："
+    : "Remaining:",
+
+  freeButton: lang === "vi" ? "Nhận miễn phí"
+    : lang === "zh" ? "免費領取"
+    : "Get Free",
+
+  freeSoldOut: lang === "vi" ? "Hết suất"
+    : lang === "zh" ? "已送完"
+    : "Sold out",
+
+  sponsorTitle: lang === "vi" ? "Mời một tô phở"
+    : lang === "zh" ? "請一碗河粉"
+    : "Sponsor a Bowl",
+
+  sponsorDesc: lang === "vi" ? "Đóng góp cho cộng đồng"
+    : lang === "zh" ? "支持社區"
+    : "Support community",
+
+  sponsorTotal: lang === "vi" ? "Đã mời:"
+    : lang === "zh" ? "已請："
+    : "Total:",
+
+  sponsorButton: lang === "vi" ? "Mời ngay"
+    : lang === "zh" ? "立即請"
+    : "Sponsor",
+
+  sponsorConfirm: lang === "vi" ? "Bạn có chắc muốn mời phở?"
+    : lang === "zh" ? "確定要請客嗎？"
+    : "Are you sure to sponsor pho?",
+
+  freeConfirm: lang === "vi" ? "Bạn có chắc muốn nhận suất miễn phí?"
+    : lang === "zh" ? "確定要領取免費河粉嗎？"
+    : "Are you sure to claim free pho?",
+
+  priceUnit: lang === "vi" ? "tô"
+    : lang === "zh" ? "碗"
+    : "bowl"
+};
+const loadCommunityStatus = () => {
+  fetch(`${BACKEND_URL}/api/community-status`)
+    .then((res) => res.json())
+    .then((data) => {
+      if (data.success) {
+        setCommunityStatus({
+          dailyBase: data.dailyBase,
+          dailyFreeAvailable: data.dailyFreeAvailable,
+          totalSponsored: data.totalSponsored,
+          lastResetDate: data.lastResetDate
+        });
+      }
+    })
+    .catch(() => {
+      setCommunityStatus({
+        dailyBase: 10,
+        dailyFreeAvailable: 10,
+        totalSponsored: 0,
+        lastResetDate: ""
+      });
+    });
+};
+
+const orderCommunityFreePho = async () => {
+  if (!hasValidTable) {
+    alert(t.qrOnlyWarning);
+    return;
+  }
+
+  const ok = window.confirm(communityText.freeConfirm);
+  if (!ok) return;
+
+  try {
+    setCommunityLoading(true);
+
+    const res = await fetch(`${BACKEND_URL}/api/community/free`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        table,
+        qty: 1
+      })
+    });
+
+    const data = await res.json();
+    setCommunityLoading(false);
+
+    if (data.success) {
+      alert(data.message || "OK");
+      loadCommunityStatus();
+    } else {
+      alert(data.message || "Fail");
+    }
+  } catch (error) {
+    setCommunityLoading(false);
+    alert(t.backendError);
+  }
+};
+
+const sponsorCommunityPho = async () => {
+  if (!hasValidTable) {
+    alert(t.qrOnlyWarning);
+    return;
+  }
+
+  const ok = window.confirm(communityText.sponsorConfirm);
+  if (!ok) return;
+
+  try {
+    setCommunityLoading(true);
+
+    const res = await fetch(`${BACKEND_URL}/api/community/sponsor`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        table,
+        qty: 1,
+        pricePerBowl: 150
+      })
+    });
+
+    const data = await res.json();
+    setCommunityLoading(false);
+
+    if (data.success) {
+      alert(data.message || "OK");
+      loadCommunityStatus();
+    } else {
+      alert(data.message || "Fail");
+    }
+  } catch (error) {
+    setCommunityLoading(false);
+    alert(t.backendError);
+  }
+};
+
   useEffect(() => {
+    loadCommunityStatus();
     fetch(`${BACKEND_URL}/api/menu`)
       .then((res) => res.json())
       .then((data) => setMenu(Array.isArray(data) ? data : []))
@@ -379,6 +536,43 @@ function App() {
               <button key={cat} className={category === cat ? "tab active" : "tab"} onClick={() => setCategory(cat)}>{t.categories[cat]}</button>
             ))}
           </div>
+
+<section className="community-section">
+  <div className="community-grid">
+    <div className="community-card free-card">
+      <h3>{communityText.freeTitle}</h3>
+      <p>{communityText.freeDesc}</p>
+      <div className="community-count">
+        {communityText.freeRemaining} {communityStatus.dailyFreeAvailable}
+      </div>
+      <button
+        className="community-btn"
+        onClick={orderCommunityFreePho}
+        disabled={communityLoading || communityStatus.dailyFreeAvailable <= 0}
+      >
+        {communityStatus.dailyFreeAvailable > 0
+          ? communityText.freeButton
+          : communityText.freeSoldOut}
+      </button>
+    </div>
+
+    <div className="community-card sponsor-card">
+      <h3>{communityText.sponsorTitle}</h3>
+      <p>{communityText.sponsorDesc}</p>
+      <div className="community-count">
+        {communityText.sponsorTotal} {communityStatus.totalSponsored}
+      </div>
+      <div className="community-price">150 NT$ / {communityText.priceUnit}</div>
+      <button
+        className="community-btn"
+        onClick={sponsorCommunityPho}
+        disabled={communityLoading}
+      >
+        {communityText.sponsorButton}
+      </button>
+    </div>
+  </div>
+</section>
 
           <section className="menu-grid">
             {filteredMenu.map((item) => {
