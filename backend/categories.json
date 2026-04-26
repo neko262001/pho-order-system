@@ -1,0 +1,59 @@
+[
+  {
+    "id": "all",
+    "vi": "Tất cả",
+    "zh": "全部",
+    "en": "All",
+    "sort": 0,
+    "fixed": true
+  },
+  {
+    "id": "spicy",
+    "vi": "Mỳ cay",
+    "zh": "越式部隊鍋",
+    "en": "Vietnamese Spicy Hot Pot",
+    "sort": 1
+  },
+  {
+    "id": "pho",
+    "vi": "Phở",
+    "zh": "河粉",
+    "en": "Pho",
+    "sort": 2
+  },
+  {
+    "id": "rice",
+    "vi": "Cơm & canh",
+    "zh": "飯・湯",
+    "en": "Rice & Soup",
+    "sort": 3
+  },
+  {
+    "id": "fruit_tea",
+    "vi": "Trà trái cây",
+    "zh": "果茶",
+    "en": "Fruit Tea",
+    "sort": 4
+  },
+  {
+    "id": "drinks",
+    "vi": "Đồ uống",
+    "zh": "飲品",
+    "en": "Drinks",
+    "sort": 5
+  },
+  {
+    "id": "fried",
+    "vi": "Đồ rán",
+    "zh": "炸物",
+    "en": "Fried Snacks",
+    "sort": 6
+  },
+  {
+    "id": "viet_fried",
+    "vi": "Đồ rán Việt Nam",
+    "zh": "越式炸物",
+    "en": "Vietnamese Fried Food",
+    "sort": 7
+  }
+]

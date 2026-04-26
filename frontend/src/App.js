@@ -1,686 +1,1067 @@
 import React, { useEffect, useMemo, useState } from "react";
+import "./App.css";
 
-const BACKEND_URL = "https://pho-order-system.onrender.com";
+const BACKEND_URL =
+  process.env.REACT_APP_BACKEND_URL || "https://pho-order-system.onrender.com";
 
-const TEXT = {
+const UI = {
   vi: {
-    title: "Huy Siu Nhân",
-    subtitle: "Đặt món nhanh chóng - giao diện đa ngôn ngữ",
-    tableLabel: "Bàn số",
-    qrOnlyWarning: "Vui lòng quét mã QR tại bàn để đặt món.",
-    categories: { all: "Tất cả", spicy: "Mỳ cay", pho: "Phở", rice: "Cơm", tea: "Trà trái cây", fried: "Đồ rán" },
+    table: "Bàn",
+    takeaway: "Mang về",
+    scanQr: "Vui lòng quét QR tại bàn để đặt món.",
+    search: "Tìm món...",
     featured: "Món nổi bật",
-    add: "Thêm",
+    menu: "Thực đơn",
+    all: "Tất cả",
+    add: "Thêm món",
     soldOut: "Tạm hết",
-    cart: "Giỏ hàng",
-    emptyCart: "Chưa có món nào",
+    cart: "Đơn của bàn",
+    empty: "Chưa có món nào",
     total: "Tổng cộng",
     clear: "Xóa giỏ",
     order: "Đặt món",
-    qrToOrder: "Quét QR để đặt món",
-    chooseItemsFirst: "Vui lòng chọn món trước.",
+    checkout: "Thanh toán & yêu cầu",
+    note: "Ghi chú cho quán",
+    notePlaceholder: "Ví dụ: ít cay, nhiều nước, trẻ em ăn...",
+    noCoriander: "Không rau mùi",
+    noGreenOnion: "Không hành",
+    noPepper: "Không tiêu",
+    noOnion: "Không hành tây",
+    staffTitle: "Gọi nhân viên",
+    staffPlaceholder: "Ví dụ: cho xin thêm chén, muỗng, nước lọc...",
+    sendStaff: "Gửi yêu cầu",
     success: "Đặt món thành công!",
     fail: "Lỗi đặt món!",
     backendError: "Không kết nối server!",
-    spicyLevelTitle: "Chọn cấp độ cay",
-    phoTypeTitle: "Chọn loại thịt",
+    optionPho: "Chọn thịt",
     rare: "Tái",
     wellDone: "Chín",
-    rareWellDone: "Tái + Chín",
-    confirmAdd: "Xác nhận thêm món",
+    rareCooked: "Tái + chín",
+    rareBrisket: "Tái + nạm",
+    cookedBrisket: "Chín + nạm",
+    spicyRice: "Cơm cay?",
+    spicyLevel: "Cay hay không cay",
+    spicy: "Cay",
+    notSpicy: "Không cay",
+    addons: "Thêm món kèm",
+    quickAdd: "Thêm nhanh gần thanh toán",
+    extraRice: "Thêm cơm",
+    extraNoodle: "Thêm mỳ",
+    extraMeat: "Thêm thịt",
+    extraShrimp: "Thêm tôm",
+    itemNote: "Ghi chú riêng cho món này",
+    confirmAdd: "Thêm vào giỏ",
     cancel: "Hủy",
-    callStaff: "Gọi nhân viên",
-    messageStaff: "Nhắn nhân viên",
-    staffPlaceholder: "Ví dụ: Cho xin thêm chén, muỗng, nước lọc...",
-    sendMessage: "Gửi yêu cầu",
-    quickActionsTitle: "Yêu cầu nhanh",
-    quickBowl: "Cho xin thêm chén",
-    quickSpoon: "Cho xin thêm muỗng đũa",
-    quickWater: "Cho xin thêm nước",
-    quickBill: "Cho xin tính tiền",
-    staffSent: "Đã gửi yêu cầu cho nhân viên!",
-    staffNeedQR: "Vui lòng quét QR tại bàn trước khi gọi nhân viên.",
-    loading: "Đang gửi..."
+    qty: "Số lượng"
   },
   zh: {
-    title: "GOKA",
-    subtitle: "快速點餐 - 多語言介面",
-    tableLabel: "桌號",
-    qrOnlyWarning: "請掃描桌上的 QR Code 才能點餐。",
-    categories: { all: "全部", spicy: "部隊鍋", pho: "河粉", rice: "飯", tea: "果茶", fried: "炸物" },
+    table: "桌號",
+    takeaway: "外帶",
+    scanQr: "請掃描桌上的 QR Code 才能點餐。",
+    search: "搜尋餐點...",
     featured: "推薦餐點",
-    add: "加入",
+    menu: "菜單",
+    all: "全部",
+    add: "加入餐點",
     soldOut: "暫時沒有",
-    cart: "購物車",
-    emptyCart: "尚未選擇餐點",
+    cart: "本桌訂單",
+    empty: "尚未選擇餐點",
     total: "總計",
-    clear: "清空購物車",
-    order: "下單",
-    qrToOrder: "掃描 QR 才能點餐",
-    chooseItemsFirst: "請先選擇餐點。",
+    clear: "清空",
+    order: "送出訂單",
+    checkout: "結帳與需求",
+    note: "給店家的備註",
+    notePlaceholder: "例如：小辣、多湯、給小孩吃...",
+    noCoriander: "不要香菜",
+    noGreenOnion: "不要蔥",
+    noPepper: "不要胡椒",
+    noOnion: "不要洋蔥",
+    staffTitle: "呼叫店員",
+    staffPlaceholder: "例如：請給我碗、餐具、水...",
+    sendStaff: "送出需求",
     success: "點餐成功！",
     fail: "下單失敗！",
     backendError: "無法連接伺服器！",
-    spicyLevelTitle: "選擇辣度",
-    phoTypeTitle: "選擇牛肉熟度",
+    optionPho: "選擇牛肉熟度",
     rare: "生",
     wellDone: "熟",
-    rareWellDone: "生 + 熟",
-    confirmAdd: "確認加入餐點",
+    rareCooked: "生熟綜合",
+    rareBrisket: "生牛肉 + 牛腩",
+    cookedBrisket: "熟牛肉 + 牛腩",
+    spicyRice: "飯要辣嗎？",
+    spicyLevel: "辣或不辣",
+    spicy: "辣",
+    notSpicy: "不辣",
+    addons: "加點",
+    quickAdd: "結帳區快速加點",
+    extraRice: "加飯",
+    extraNoodle: "加麵",
+    extraMeat: "加肉",
+    extraShrimp: "加蝦",
+    itemNote: "此餐點備註",
+    confirmAdd: "加入購物車",
     cancel: "取消",
-    callStaff: "呼叫店員",
-    messageStaff: "傳訊息給店員",
-    staffPlaceholder: "例如：請給我多一個碗、湯匙、水...",
-    sendMessage: "送出請求",
-    quickActionsTitle: "快速需求",
-    quickBowl: "請再給我一個碗",
-    quickSpoon: "請再給我餐具",
-    quickWater: "請再給我水",
-    quickBill: "請幫我結帳",
-    staffSent: "已傳送給店員！",
-    staffNeedQR: "請先掃描桌上的 QR Code。",
-    loading: "傳送中..."
+    qty: "數量"
   },
   en: {
-    title: "Goka",
-    subtitle: "Fast ordering - multilingual interface",
-    tableLabel: "Table",
-    qrOnlyWarning: "Please scan the table QR code to place an order.",
-    categories: { all: "All", spicy: "Spicy Pot", pho: "Pho", rice: "Rice", tea: "Fruit Tea", fried: "Fried Snacks" },
-    featured: "Featured Dishes",
-    add: "Add",
-    soldOut: "Sold Out",
-    cart: "Cart",
-    emptyCart: "No items yet",
+    table: "Table",
+    takeaway: "Takeaway",
+    scanQr: "Please scan the table QR code to order.",
+    search: "Search items...",
+    featured: "Featured",
+    menu: "Menu",
+    all: "All",
+    add: "Add item",
+    soldOut: "Sold out",
+    cart: "Table Order",
+    empty: "No items yet",
     total: "Total",
-    clear: "Clear Cart",
+    clear: "Clear",
     order: "Place Order",
-    qrToOrder: "Scan QR to order",
-    chooseItemsFirst: "Please choose items first.",
+    checkout: "Checkout & Requests",
+    note: "Note for restaurant",
+    notePlaceholder: "Example: less spicy, more soup, for kids...",
+    noCoriander: "No coriander",
+    noGreenOnion: "No green onion",
+    noPepper: "No pepper",
+    noOnion: "No onion",
+    staffTitle: "Call Staff",
+    staffPlaceholder: "Example: extra bowl, spoon, water...",
+    sendStaff: "Send Request",
     success: "Order placed successfully!",
     fail: "Order failed!",
     backendError: "Cannot connect to server!",
-    spicyLevelTitle: "Choose spicy level",
-    phoTypeTitle: "Choose beef type",
+    optionPho: "Choose beef type",
     rare: "Rare",
     wellDone: "Well done",
-    rareWellDone: "Rare + Well done",
-    confirmAdd: "Confirm add",
+    rareCooked: "Rare + well done",
+    rareBrisket: "Rare + brisket",
+    cookedBrisket: "Cooked + brisket",
+    spicyRice: "Spicy rice?",
+    spicyLevel: "Spicy or not",
+    spicy: "Spicy",
+    notSpicy: "Not spicy",
+    addons: "Add-ons",
+    quickAdd: "Quick add-ons near checkout",
+    extraRice: "Extra rice",
+    extraNoodle: "Extra noodle",
+    extraMeat: "Extra meat",
+    extraShrimp: "Extra shrimp",
+    itemNote: "Note for this item",
+    confirmAdd: "Add to cart",
     cancel: "Cancel",
-    callStaff: "Call staff",
-    messageStaff: "Message staff",
-    staffPlaceholder: "Example: Please bring more bowls, spoons, water...",
-    sendMessage: "Send request",
-    quickActionsTitle: "Quick requests",
-    quickBowl: "Need an extra bowl",
-    quickSpoon: "Need extra utensils",
-    quickWater: "Need more water",
-    quickBill: "Please bring the bill",
-    staffSent: "Request sent to staff!",
-    staffNeedQR: "Please scan the table QR code first.",
-    loading: "Sending..."
+    qty: "Quantity"
   }
 };
+
+const FALLBACK_SETTINGS = {
+  logoTitle: "Goka phở & mỳ cay",
+  subtitle_vi: "Đặt món nhanh chóng - giao diện đa ngôn ngữ",
+  subtitle_zh: "快速點餐 - 多語言介面",
+  subtitle_en: "Fast ordering - multilingual interface"
+};
+
+const FALLBACK_CATEGORIES = [
+  { id: "spicy_hotpot", vi: "Mỳ cay", zh: "越式部隊鍋", en: "Vietnamese Spicy Hot Pot", sort: 1, sortOrder: 1 },
+  { id: "pho", vi: "Phở", zh: "河粉", en: "Pho", sort: 2, sortOrder: 2 },
+  { id: "rice_soup_noodle", vi: "Cơm & canh & mỳ xào", zh: "飯・湯・炒麵", en: "Rice, Soup & Stir-fried Noodles", sort: 3, sortOrder: 3 },
+  { id: "fruit_tea", vi: "Trà trái cây", zh: "果茶", en: "Fruit Tea", sort: 4, sortOrder: 4 },
+  { id: "drinks", vi: "Đồ uống", zh: "飲品", en: "Drinks", sort: 5, sortOrder: 5 },
+  { id: "fried", vi: "Đồ rán", zh: "炸物", en: "Fried Snacks", sort: 6, sortOrder: 6 },
+  { id: "vietnamese_fried", vi: "Đồ rán Việt Nam", zh: "越式炸物", en: "Vietnamese Fried Food", sort: 7, sortOrder: 7 }
+];
+
+const FALLBACK_ADDONS = {
+  pho: [
+    { id: "extra_pho_noodle", name_vi: "Thêm bánh phở", name_zh: "加河粉", name_en: "Extra pho noodles", price: 20, active: true },
+    { id: "extra_beef", name_vi: "Thêm thịt", name_zh: "加肉", name_en: "Extra meat", price: 70, active: true }
+  ],
+  rice: [
+    { id: "extra_rice", name_vi: "Thêm cơm", name_zh: "加飯", name_en: "Extra rice", price: 20, active: true },
+    { id: "extra_egg", name_vi: "Thêm trứng", name_zh: "加蛋", name_en: "Extra egg", price: 20, active: true }
+  ],
+  spicy_hotpot: [
+    { id: "extra_noodle", name_vi: "Thêm mỳ", name_zh: "加麵", name_en: "Extra noodle", price: 20, active: true },
+    { id: "extra_meat", name_vi: "Thêm thịt", name_zh: "加肉", name_en: "Extra meat", price: 70, active: true },
+    { id: "extra_shrimp", name_vi: "Thêm tôm", name_zh: "加蝦", name_en: "Extra shrimp", price: 60, active: true }
+  ],
+  quick: [
+    { id: "quick_extra_rice", name_vi: "Thêm cơm", name_zh: "加飯", name_en: "Extra rice", price: 20, active: true },
+    { id: "quick_extra_noodle", name_vi: "Thêm mỳ", name_zh: "加麵", name_en: "Extra noodle", price: 20, active: true },
+    { id: "quick_extra_meat", name_vi: "Thêm thịt", name_zh: "加肉", name_en: "Extra meat", price: 70, active: true },
+    { id: "quick_extra_shrimp", name_vi: "Thêm tôm", name_zh: "加蝦", name_en: "Extra shrimp", price: 60, active: true }
+  ]
+};
+
+const FALLBACK_MENU = [
+  {
+    id: "spicy_deluxe",
+    category: "spicy_hotpot",
+    name_vi: "Mỳ cay thập cẩm",
+    name_zh: "豪華部隊鍋",
+    name_en: "Deluxe Spicy Hot Pot",
+    description_vi: "Hải sản + thịt + sò điệp",
+    description_zh: "海鮮 + 肉 + 扇貝",
+    description_en: "Seafood + meat + scallop",
+    price: 210,
+    featured: true,
+    available: true,
+    sortOrder: 1,
+    image: "",
+    optionType: "spicy",
+    addonsPreset: "spicy_hotpot"
+  },
+  {
+    id: "spicy_seafood",
+    category: "spicy_hotpot",
+    name_vi: "Mỳ cay hải sản",
+    name_zh: "海鮮部隊鍋",
+    name_en: "Seafood Spicy Hot Pot",
+    description_vi: "Mực, 2 con tôm, bắp cải tím, xúc xích, cá viên, bò viên, bánh gạo, nấm kim châm, bông cải, kimchi",
+    description_zh: "花枝、2隻蝦、紫色甘藍、熱狗3片、魚丸1、貢丸2-3片、年糕2、金針菇、花椰菜1、泡菜",
+    description_en: "Squid, 2 shrimp, purple cabbage, sausage, fish ball, meatballs, rice cakes, enoki mushroom, broccoli, kimchi",
+    price: 170,
+    featured: true,
+    available: true,
+    sortOrder: 2,
+    image: "",
+    optionType: "spicy",
+    addonsPreset: "spicy_hotpot"
+  },
+  {
+    id: "spicy_pork",
+    category: "spicy_hotpot",
+    name_vi: "Mỳ cay heo",
+    name_zh: "豬肉部隊鍋",
+    name_en: "Pork Spicy Hot Pot",
+    description_vi: "Heo lát, bắp cải tím, xúc xích, cá viên, bò viên, bánh gạo, nấm kim châm, bông cải, kimchi",
+    description_zh: "豬肉片4、紫色甘藍、熱狗3片、魚丸1、貢丸2-3片、年糕2、金針菇、花椰菜1、泡菜",
+    description_en: "Pork slices, purple cabbage, sausage, fish ball, meatballs, rice cakes, enoki mushroom, broccoli, kimchi",
+    price: 150,
+    featured: false,
+    available: true,
+    sortOrder: 3,
+    image: "",
+    optionType: "spicy",
+    addonsPreset: "spicy_hotpot"
+  },
+  {
+    id: "spicy_beef",
+    category: "spicy_hotpot",
+    name_vi: "Mỳ cay bò",
+    name_zh: "牛肉部隊鍋",
+    name_en: "Beef Spicy Hot Pot",
+    description_vi: "Mỳ cay bò kiểu Việt",
+    description_zh: "越式牛肉部隊鍋",
+    description_en: "Vietnamese-style beef spicy hot pot",
+    price: 150,
+    featured: false,
+    available: true,
+    sortOrder: 4,
+    image: "",
+    optionType: "spicy",
+    addonsPreset: "spicy_hotpot"
+  },
+  {
+    id: "pho_beef_rare",
+    category: "pho",
+    name_vi: "Phở bò tái",
+    name_zh: "手沖牛肉河粉",
+    name_en: "Rare Beef Pho",
+    description_vi: "Phở bò tái nước dùng kiểu Việt",
+    description_zh: "越式手沖牛肉河粉",
+    description_en: "Vietnamese pho with rare beef",
+    price: 150,
+    featured: true,
+    available: true,
+    sortOrder: 10,
+    image: "",
+    optionType: "pho",
+    addonsPreset: "pho"
+  },
+  {
+    id: "pho_chicken",
+    category: "pho",
+    name_vi: "Phở gà",
+    name_zh: "雞肉河粉",
+    name_en: "Chicken Pho",
+    description_vi: "Phở gà nước dùng thanh",
+    description_zh: "雞肉河粉",
+    description_en: "Chicken pho",
+    price: 150,
+    featured: false,
+    available: true,
+    sortOrder: 11,
+    image: "",
+    optionType: "",
+    addonsPreset: "pho"
+  },
+  {
+    id: "pho_beef_combo",
+    category: "pho",
+    name_vi: "Phở bò tổng hợp",
+    name_zh: "綜合牛肉河粉",
+    name_en: "Mixed Beef Pho",
+    description_vi: "Phở bò tổng hợp",
+    description_zh: "綜合牛肉河粉",
+    description_en: "Mixed beef pho",
+    price: 200,
+    featured: true,
+    available: true,
+    sortOrder: 12,
+    image: "",
+    optionType: "pho_combo",
+    addonsPreset: "pho"
+  },
+  {
+    id: "pho_beef_brisket",
+    category: "pho",
+    name_vi: "Phở bò tái + nạm",
+    name_zh: "手沖牛肉+牛腩河粉",
+    name_en: "Rare Beef & Brisket Pho",
+    description_vi: "Phở bò tái kết hợp nạm",
+    description_zh: "手沖牛肉加牛腩河粉",
+    description_en: "Rare beef pho with brisket",
+    price: 150,
+    featured: false,
+    available: true,
+    sortOrder: 13,
+    image: "",
+    optionType: "pho_brisket",
+    addonsPreset: "pho"
+  },
+  {
+    id: "rice_pickle_beef",
+    category: "rice_soup_noodle",
+    name_vi: "Cơm rang dưa bò",
+    name_zh: "酸菜牛肉炒飯",
+    name_en: "Beef Pickled Mustard Fried Rice",
+    description_vi: "Cơm rang dưa bò",
+    description_zh: "酸菜牛肉炒飯",
+    description_en: "Fried rice with beef and pickled mustard",
+    price: 120,
+    featured: false,
+    available: true,
+    sortOrder: 20,
+    image: "",
+    optionType: "rice",
+    addonsPreset: "rice"
+  },
+  {
+    id: "rice_pork_chop",
+    category: "rice_soup_noodle",
+    name_vi: "Cơm sườn",
+    name_zh: "排骨飯",
+    name_en: "Pork Chop Rice",
+    description_vi: "Cơm sườn",
+    description_zh: "排骨飯",
+    description_en: "Rice with pork chop",
+    price: 120,
+    featured: false,
+    available: true,
+    sortOrder: 21,
+    image: "",
+    optionType: "rice",
+    addonsPreset: "rice"
+  },
+  {
+    id: "soup_beef_ball",
+    category: "rice_soup_noodle",
+    name_vi: "Canh bò viên",
+    name_zh: "牛肉丸湯",
+    name_en: "Beef Ball Soup",
+    description_vi: "Canh bò viên",
+    description_zh: "牛肉丸湯",
+    description_en: "Beef ball soup",
+    price: 60,
+    featured: false,
+    available: true,
+    sortOrder: 22,
+    image: "",
+    optionType: "",
+    addonsPreset: ""
+  },
+  {
+    id: "soup_beef_rib",
+    category: "rice_soup_noodle",
+    name_vi: "Canh sườn bò",
+    name_zh: "牛排骨湯",
+    name_en: "Beef Rib Soup",
+    description_vi: "Canh sườn bò",
+    description_zh: "牛排骨湯",
+    description_en: "Beef rib soup",
+    price: 60,
+    featured: false,
+    available: true,
+    sortOrder: 23,
+    image: "",
+    optionType: "",
+    addonsPreset: ""
+  },
+  { id: "tea_longan", category: "fruit_tea", name_vi: "Trà nhãn", name_zh: "龍眼果茶", name_en: "Longan Fruit Tea", description_vi: "Trà trái cây vị nhãn", description_zh: "龍眼果茶", description_en: "Longan fruit tea", price: 75, featured: false, available: true, sortOrder: 30, image: "", optionType: "", addonsPreset: "" },
+  { id: "tea_guava", category: "fruit_tea", name_vi: "Trà ổi", name_zh: "芭樂果茶", name_en: "Guava Fruit Tea", description_vi: "Trà ổi", description_zh: "芭樂果茶", description_en: "Guava fruit tea", price: 80, featured: false, available: true, sortOrder: 31, image: "", optionType: "", addonsPreset: "" },
+  { id: "tea_melon", category: "fruit_tea", name_vi: "Trà dưa lưới", name_zh: "哈密瓜果茶", name_en: "Melon Fruit Tea", description_vi: "Trà dưa lưới", description_zh: "哈密瓜果茶", description_en: "Melon fruit tea", price: 90, featured: false, available: true, sortOrder: 32, image: "", optionType: "", addonsPreset: "" },
+  { id: "tea_strawberry", category: "fruit_tea", name_vi: "Trà dâu tây theo mùa", name_zh: "草莓果茶", name_en: "Seasonal Strawberry Fruit Tea", description_vi: "Theo mùa", description_zh: "季節限定", description_en: "Seasonal", price: 100, featured: false, available: true, sortOrder: 33, image: "", optionType: "", addonsPreset: "" },
+  { id: "tea_mango_passion", category: "fruit_tea", name_vi: "Trà xoài chanh dây", name_zh: "百香芒芒果茶", name_en: "Mango Passion Fruit Tea", description_vi: "Xoài + chanh dây", description_zh: "芒果百香果茶", description_en: "Mango and passion fruit tea", price: 75, featured: false, available: true, sortOrder: 34, image: "", optionType: "", addonsPreset: "" },
+  { id: "tea_peach", category: "fruit_tea", name_vi: "Trà đào", name_zh: "水蜜桃果茶", name_en: "Peach Fruit Tea", description_vi: "Trà đào", description_zh: "水蜜桃果茶", description_en: "Peach fruit tea", price: 75, featured: false, available: true, sortOrder: 35, image: "", optionType: "", addonsPreset: "" },
+  { id: "tea_tropical", category: "fruit_tea", name_vi: "Trà trái cây nhiệt đới", name_zh: "綜合水果茶", name_en: "Tropical Mixed Fruit Tea", description_vi: "Trà trái cây tổng hợp", description_zh: "綜合水果茶", description_en: "Mixed tropical fruit tea", price: 75, featured: false, available: true, sortOrder: 36, image: "", optionType: "", addonsPreset: "" },
+  { id: "drink_cocoa_milk", category: "drinks", name_vi: "Ca cao sữa", name_zh: "可可牛奶", name_en: "Cocoa Milk", description_vi: "Ca cao sữa", description_zh: "可可牛奶", description_en: "Cocoa milk", price: 65, featured: false, available: true, sortOrder: 40, image: "", optionType: "", addonsPreset: "" },
+  { id: "drink_taro_milk", category: "drinks", name_vi: "Trà sữa khoai môn", name_zh: "芋香牛奶", name_en: "Taro Milk Tea", description_vi: "Trà sữa khoai môn", description_zh: "芋香牛奶", description_en: "Taro milk tea", price: 65, featured: false, available: true, sortOrder: 41, image: "", optionType: "", addonsPreset: "" },
+  { id: "drink_americano", category: "drinks", name_vi: "Americano", name_zh: "經典美式", name_en: "Americano", description_vi: "Cà phê Americano", description_zh: "經典美式咖啡", description_en: "Classic Americano", price: 50, featured: false, available: true, sortOrder: 42, image: "", optionType: "", addonsPreset: "" },
+  { id: "drink_black_coffee", category: "drinks", name_vi: "Cà phê nguyên chất", name_zh: "特濃", name_en: "Strong Black Coffee", description_vi: "Cà phê nguyên chất", description_zh: "特濃咖啡", description_en: "Strong coffee", price: 50, featured: false, available: true, sortOrder: 43, image: "", optionType: "", addonsPreset: "" },
+  { id: "drink_latte", category: "drinks", name_vi: "Latte", name_zh: "拿鐵", name_en: "Latte", description_vi: "Latte", description_zh: "拿鐵", description_en: "Latte", price: 65, featured: false, available: true, sortOrder: 44, image: "", optionType: "", addonsPreset: "" },
+  { id: "drink_vn_milk_coffee", category: "drinks", name_vi: "Cà phê sữa Việt Nam", name_zh: "越式煉乳咖啡", name_en: "Vietnamese Condensed Milk Coffee", description_vi: "Cà phê sữa", description_zh: "越式煉乳咖啡", description_en: "Vietnamese milk coffee", price: 65, featured: false, available: true, sortOrder: 45, image: "", optionType: "", addonsPreset: "" },
+  { id: "drink_salt_coffee", category: "drinks", name_vi: "Cà phê muối", name_zh: "鹹咖啡", name_en: "Salt Coffee", description_vi: "Cà phê muối", description_zh: "鹹咖啡", description_en: "Salt coffee", price: 80, featured: false, available: true, sortOrder: 46, image: "", optionType: "", addonsPreset: "" },
+  { id: "fried_combo", category: "fried", name_vi: "Combo đồ rán", name_zh: "炸物拼盤", name_en: "Fried Combo Platter", description_vi: "Combo đồ rán tổng hợp", description_zh: "炸物拼盤", description_en: "Mixed fried platter", price: 200, featured: false, available: true, sortOrder: 50, image: "", optionType: "", addonsPreset: "" },
+  { id: "fried_qq", category: "fried", name_vi: "QQ棒", name_zh: "QQ棒", name_en: "QQ Stick", description_vi: "QQ棒 này ngon nè", description_zh: "QQ棒", description_en: "QQ stick snack", price: 50, featured: false, available: true, sortOrder: 51, image: "", optionType: "", addonsPreset: "" },
+  { id: "fried_tempura", category: "fried", name_vi: "Tempura", name_zh: "甜不辣", name_en: "Tempura", description_vi: "Tempura chiên", description_zh: "甜不辣", description_en: "Fried tempura", price: 35, featured: false, available: true, sortOrder: 52, image: "", optionType: "", addonsPreset: "" },
+  { id: "fried_silver_roll", category: "fried", name_vi: "Ngân ti quyển", name_zh: "銀絲卷", name_en: "Silver Thread Roll", description_vi: "Bánh cuộn chiên", description_zh: "銀絲卷", description_en: "Fried silver thread roll", price: 50, featured: false, available: true, sortOrder: 53, image: "", optionType: "", addonsPreset: "" },
+  { id: "fried_fries", category: "fried", name_vi: "Khoai tây chiên", name_zh: "黃金薯條", name_en: "French Fries", description_vi: "Khoai tây chiên vàng", description_zh: "黃金薯條", description_en: "Golden fries", price: 45, featured: false, available: true, sortOrder: 54, image: "", optionType: "", addonsPreset: "" },
+  { id: "fried_nuggets", category: "fried", name_vi: "Gà viên", name_zh: "麥克雞塊", name_en: "Chicken Nuggets", description_vi: "Gà viên kiểu McNuggets", description_zh: "麥克雞塊", description_en: "Chicken nuggets", price: 45, featured: false, available: true, sortOrder: 55, image: "", optionType: "", addonsPreset: "" },
+  { id: "fried_karaage", category: "fried", name_vi: "Gà karaage", name_zh: "唐揚雞", name_en: "Karaage Chicken", description_vi: "Gà viên chiên kiểu Nhật", description_zh: "唐揚雞", description_en: "Japanese fried chicken", price: 50, featured: false, available: true, sortOrder: 56, image: "", optionType: "", addonsPreset: "" },
+  { id: "fried_onion_ring", category: "fried", name_vi: "Hành vòng chiên", name_zh: "洋蔥圈", name_en: "Onion Rings", description_vi: "Hành rán", description_zh: "洋蔥圈", description_en: "Fried onion rings", price: 45, featured: false, available: true, sortOrder: 57, image: "", optionType: "", addonsPreset: "" },
+  { id: "vn_spring_roll", category: "vietnamese_fried", name_vi: "Nem rán Việt Nam (3 cái)", name_zh: "炸春捲（3個）", name_en: "Vietnamese Fried Spring Rolls (3 pcs)", description_vi: "Nem rán 3 cái", description_zh: "炸春捲三個", description_en: "Three Vietnamese fried spring rolls", price: 120, featured: false, available: true, sortOrder: 60, image: "", optionType: "", addonsPreset: "" },
+  { id: "vn_skewer", category: "vietnamese_fried", name_vi: "Xiên bẩn", name_zh: "越式炸串", name_en: "Vietnamese Fried Skewers", description_vi: "Xiên ăn vặt Việt Nam", description_zh: "越式炸串", description_en: "Vietnamese street-style fried skewers", price: 100, featured: false, available: true, sortOrder: 61, image: "", optionType: "", addonsPreset: "" }
+];
+
+function textByLang(obj, lang) {
+  if (!obj) return "";
+  if (typeof obj === "string") return obj;
+  return obj[`name_${lang}`] || obj[lang] || obj.name_vi || obj.vi || obj.name_en || obj.en || obj.name_zh || obj.zh || "";
+}
+
+function descByLang(item, lang) {
+  if (!item) return "";
+  return item[`description_${lang}`] || item.description_vi || item.description_en || item.description_zh || "";
+}
+
+function money(n) {
+  return `${Number(n || 0).toLocaleString()} NT$`;
+}
+
+function normalizeAddon(addon) {
+  if (!addon) return null;
+  if (addon.name) {
+    return {
+      id: addon.id,
+      name_vi: addon.name.vi || addon.name_vi || addon.vi || "",
+      name_zh: addon.name.zh || addon.name_zh || addon.zh || "",
+      name_en: addon.name.en || addon.name_en || addon.en || "",
+      price: Number(addon.price || 0),
+      active: addon.active !== false,
+      appliesTo: addon.appliesTo
+    };
+  }
+  return { ...addon, price: Number(addon.price || 0), active: addon.active !== false };
+}
+
+function normalizeAddonData(raw) {
+  if (!raw) return FALLBACK_ADDONS;
+
+  if (Array.isArray(raw)) {
+    const grouped = { pho: [], rice: [], spicy_hotpot: [], quick: [...FALLBACK_ADDONS.quick] };
+    raw.forEach((a) => {
+      const addon = normalizeAddon(a);
+      if (!addon || addon.active === false) return;
+      const applies = Array.isArray(addon.appliesTo) ? addon.appliesTo : [];
+      if (applies.includes("pho")) grouped.pho.push(addon);
+      if (applies.includes("rice_soup_noodle")) grouped.rice.push(addon);
+      if (applies.includes("spicy_hotpot")) grouped.spicy_hotpot.push(addon);
+    });
+    return {
+      pho: grouped.pho.length ? grouped.pho : FALLBACK_ADDONS.pho,
+      rice: grouped.rice.length ? grouped.rice : FALLBACK_ADDONS.rice,
+      spicy_hotpot: grouped.spicy_hotpot.length ? grouped.spicy_hotpot : FALLBACK_ADDONS.spicy_hotpot,
+      quick: grouped.quick
+    };
+  }
+
+  const grouped = { ...FALLBACK_ADDONS };
+  Object.keys(raw).forEach((key) => {
+    grouped[key] = Array.isArray(raw[key])
+      ? raw[key].map(normalizeAddon).filter(Boolean)
+      : grouped[key];
+  });
+  return grouped;
+}
+
+function normalizeItem(item) {
+  const next = { ...item };
+
+  if (next.name && typeof next.name === "object") {
+    next.name_vi = next.name.vi || next.name_vi || "";
+    next.name_zh = next.name.zh || next.name_zh || "";
+    next.name_en = next.name.en || next.name_en || "";
+  }
+
+  if (next.description && typeof next.description === "object") {
+    next.description_vi = next.description.vi || next.description_vi || "";
+    next.description_zh = next.description.zh || next.description_zh || "";
+    next.description_en = next.description.en || next.description_en || "";
+  }
+
+  next.price = Number(next.price || 0);
+  next.available = next.available !== false;
+  next.sortOrder = Number(next.sortOrder || next.sort || 999);
+
+  if (!next.optionType && next.optionPreset) {
+    if (next.optionPreset === "spicy") next.optionType = "spicy";
+    if (next.optionPreset === "rice_spicy") next.optionType = "rice";
+    if (next.optionPreset === "pho") next.optionType = "pho";
+    if (next.optionPreset === "pho_combo") next.optionType = "pho_combo";
+    if (next.optionPreset === "pho_brisket") next.optionType = "pho_brisket";
+  }
+
+  if (!next.addonsPreset && typeof next.addons === "string") {
+    next.addonsPreset = next.addons;
+  }
+
+  return next;
+}
+
+function getPhoTypeLabel(type, lang, t) {
+  if (type === "rare") return t.rare;
+  if (type === "wellDone" || type === "cooked") return t.wellDone;
+  if (type === "rareCooked") return t.rareCooked;
+  if (type === "rareBrisket") return t.rareBrisket;
+  if (type === "cookedBrisket") return t.cookedBrisket;
+  return type || "";
+}
 
 function App() {
   const [lang, setLang] = useState("vi");
   const [table, setTable] = useState("");
   const [hasValidTable, setHasValidTable] = useState(false);
+
+  const [settings, setSettings] = useState(FALLBACK_SETTINGS);
+  const [categories, setCategories] = useState(FALLBACK_CATEGORIES);
+  const [addons, setAddons] = useState(FALLBACK_ADDONS);
+  const [menu, setMenu] = useState(FALLBACK_MENU);
+
   const [category, setCategory] = useState("all");
-  const [menu, setMenu] = useState([]);
+  const [search, setSearch] = useState("");
   const [cart, setCart] = useState([]);
-  const [optionModalOpen, setOptionModalOpen] = useState(false);
-  const [communityStatus, setCommunityStatus] = useState({
-  dailyBase: 10,
-  dailyFreeAvailable: 10,
-  totalSponsored: 0,
-  lastResetDate: ""
-});
-const [communityLoading, setCommunityLoading] = useState(false);
-  const [selectedItem, setSelectedItem] = useState(null);
-  const [selectedSpicyLevel, setSelectedSpicyLevel] = useState(1);
-  const [selectedPhoType, setSelectedPhoType] = useState("");
-  const [staffModalOpen, setStaffModalOpen] = useState(false);
+
+  const [modalItem, setModalItem] = useState(null);
+  const [modalQty, setModalQty] = useState(1);
+  const [phoType, setPhoType] = useState("rare");
+  const [riceSpicy, setRiceSpicy] = useState("notSpicy");
+  const [hotpotSpicy, setHotpotSpicy] = useState("notSpicy");
+  const [selectedAddons, setSelectedAddons] = useState({});
+  const [itemNote, setItemNote] = useState("");
+
+  const [customerNote, setCustomerNote] = useState("");
   const [staffMessage, setStaffMessage] = useState("");
-  const [sendingStaffMessage, setSendingStaffMessage] = useState(false);
+  const [noFlags, setNoFlags] = useState({
+    noCoriander: false,
+    noGreenOnion: false,
+    noPepper: false,
+    noOnion: false
+  });
 
-  const t = TEXT[lang];
-
-const communityText = {
-  freeTitle: lang === "vi" ? "Phở miễn phí hôm nay"
-    : lang === "zh" ? "今日免費牛肉河粉"
-    : "Today's Free Pho",
-
-  freeDesc: lang === "vi" ? "Dành cho người cần giúp đỡ"
-    : lang === "zh" ? "提供給需要的人"
-    : "For people in need",
-
-  freeRemaining: lang === "vi" ? "Còn lại:"
-    : lang === "zh" ? "剩餘："
-    : "Remaining:",
-
-  freeButton: lang === "vi" ? "Nhận miễn phí"
-    : lang === "zh" ? "免費領取"
-    : "Get Free",
-
-  freeSoldOut: lang === "vi" ? "Hết suất"
-    : lang === "zh" ? "已送完"
-    : "Sold out",
-
-  sponsorTitle: lang === "vi" ? "Mời một tô phở"
-    : lang === "zh" ? "請一碗河粉"
-    : "Sponsor a Bowl",
-
-  sponsorDesc: lang === "vi" ? "Đóng góp cho cộng đồng"
-    : lang === "zh" ? "支持社區"
-    : "Support community",
-
-  sponsorTotal: lang === "vi" ? "Đã mời:"
-    : lang === "zh" ? "已請："
-    : "Total:",
-
-  sponsorButton: lang === "vi" ? "Mời ngay"
-    : lang === "zh" ? "立即請"
-    : "Sponsor",
-
-  sponsorConfirm: lang === "vi" ? "Bạn có chắc muốn mời phở?"
-    : lang === "zh" ? "確定要請客嗎？"
-    : "Are you sure to sponsor pho?",
-
-  freeConfirm: lang === "vi" ? "Bạn có chắc muốn nhận suất miễn phí?"
-    : lang === "zh" ? "確定要領取免費河粉嗎？"
-    : "Are you sure to claim free pho?",
-
-  priceUnit: lang === "vi" ? "tô"
-    : lang === "zh" ? "碗"
-    : "bowl"
-};
-const loadCommunityStatus = () => {
-  fetch(`${BACKEND_URL}/api/community-status`)
-    .then((res) => res.json())
-    .then((data) => {
-      if (data.success) {
-        setCommunityStatus({
-          dailyBase: data.dailyBase,
-          dailyFreeAvailable: data.dailyFreeAvailable,
-          totalSponsored: data.totalSponsored,
-          lastResetDate: data.lastResetDate
-        });
-      }
-    })
-    .catch(() => {
-      setCommunityStatus({
-        dailyBase: 10,
-        dailyFreeAvailable: 10,
-        totalSponsored: 0,
-        lastResetDate: ""
-      });
-    });
-};
-
-const orderCommunityFreePho = async () => {
-  if (!hasValidTable) {
-    alert(t.qrOnlyWarning);
-    return;
-  }
-
-  const ok = window.confirm(communityText.freeConfirm);
-  if (!ok) return;
-
-  try {
-    setCommunityLoading(true);
-
-    const res = await fetch(`${BACKEND_URL}/api/community/free`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        table,
-        qty: 1
-      })
-    });
-
-    const data = await res.json();
-    setCommunityLoading(false);
-
-    if (data.success) {
-      alert(data.message || "OK");
-      loadCommunityStatus();
-    } else {
-      alert(data.message || "Fail");
-    }
-  } catch (error) {
-    setCommunityLoading(false);
-    alert(t.backendError);
-  }
-};
-
-const sponsorCommunityPho = async () => {
-  if (!hasValidTable) {
-    alert(t.qrOnlyWarning);
-    return;
-  }
-
-  const ok = window.confirm(communityText.sponsorConfirm);
-  if (!ok) return;
-
-  try {
-    setCommunityLoading(true);
-
-    const res = await fetch(`${BACKEND_URL}/api/community/sponsor`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        table,
-        qty: 1,
-        pricePerBowl: 150
-      })
-    });
-
-    const data = await res.json();
-    setCommunityLoading(false);
-
-    if (data.success) {
-      alert(data.message || "OK");
-      loadCommunityStatus();
-    } else {
-      alert(data.message || "Fail");
-    }
-  } catch (error) {
-    setCommunityLoading(false);
-    alert(t.backendError);
-  }
-};
+  const t = UI[lang];
 
   useEffect(() => {
-    loadCommunityStatus();
-    fetch(`${BACKEND_URL}/api/menu`)
-      .then((res) => res.json())
-      .then((data) => setMenu(Array.isArray(data) ? data : []))
-      .catch(() => setMenu([]));
+    async function loadAll() {
+      try {
+        const fullRes = await fetch(`${BACKEND_URL}/api/menu-full`);
+        if (fullRes.ok) {
+          const full = await fullRes.json();
+          if (full.settings) setSettings({ ...FALLBACK_SETTINGS, ...full.settings });
+          if (Array.isArray(full.categories) && full.categories.length) setCategories(full.categories);
+          if (full.addons) setAddons(normalizeAddonData(full.addons));
+          if (Array.isArray(full.items) && full.items.length) setMenu(full.items.map(normalizeItem));
+          return;
+        }
+      } catch {}
+
+      try {
+        const configRes = await fetch(`${BACKEND_URL}/api/config`);
+        const data = await configRes.json();
+        if (data.success) {
+          setSettings({ ...FALLBACK_SETTINGS, ...(data.settings || {}) });
+          if (Array.isArray(data.categories) && data.categories.length) setCategories(data.categories);
+          if (data.addons) setAddons(normalizeAddonData(data.addons));
+        }
+      } catch {}
+
+      try {
+        const menuRes = await fetch(`${BACKEND_URL}/api/menu`);
+        const data = await menuRes.json();
+        if (Array.isArray(data) && data.length) setMenu(data.map(normalizeItem));
+      } catch {}
+    }
+
+    loadAll();
 
     const params = new URLSearchParams(window.location.search);
     const qrTable = params.get("table");
-    if (qrTable && qrTable.trim() !== "") {
+    if (qrTable && qrTable.trim()) {
       setTable(qrTable.trim());
       setHasValidTable(true);
-    } else {
-      setTable("");
-      setHasValidTable(false);
     }
   }, []);
 
-  const featuredMenu = useMemo(() => menu.filter((item) => item.featured), [menu]);
+  const visibleCategories = useMemo(() => {
+    return [...categories].sort(
+      (a, b) => Number(a.sortOrder || a.sort || 0) - Number(b.sortOrder || b.sort || 0)
+    );
+  }, [categories]);
+
+  const sortedMenu = useMemo(() => {
+    return [...menu]
+      .filter((item) => item.available !== false)
+      .sort((a, b) => Number(a.sortOrder || a.sort || 999) - Number(b.sortOrder || b.sort || 999));
+  }, [menu]);
+
   const filteredMenu = useMemo(() => {
-    if (category === "all") return menu;
-    return menu.filter((item) => item.category === category);
-  }, [category, menu]);
+    const q = search.trim().toLowerCase();
+    return sortedMenu.filter((item) => {
+      if (category !== "all" && item.category !== category) return false;
+      if (!q) return true;
+      const hay = `${item.name_vi || ""} ${item.name_zh || ""} ${item.name_en || ""} ${item.description_vi || ""} ${item.description_zh || ""} ${item.description_en || ""}`.toLowerCase();
+      return hay.includes(q);
+    });
+  }, [sortedMenu, category, search]);
 
-  const total = useMemo(() => cart.reduce((sum, item) => sum + item.price * item.qty, 0), [cart]);
+  const featuredMenu = useMemo(() => sortedMenu.filter((i) => i.featured), [sortedMenu]);
 
-  const getItemName = (item) => (lang === "vi" ? item.name_vi : lang === "zh" ? item.name_zh : item.name_en);
-  const getItemDesc = (item) => (lang === "vi" ? item.description_vi : lang === "zh" ? item.description_zh : item.description_en);
+  const total = useMemo(() => cart.reduce((sum, item) => sum + Number(item.subtotal || 0), 0), [cart]);
 
-  const getOptionLabel = (item) => {
-    if (!item.selectedOptions) return "";
-    const parts = [];
-    if (item.selectedOptions.spicyLevel) {
-      if (lang === "vi") parts.push(`Cay ${item.selectedOptions.spicyLevel}`);
-      if (lang === "zh") parts.push(`辣度 ${item.selectedOptions.spicyLevel}`);
-      if (lang === "en") parts.push(`Spicy ${item.selectedOptions.spicyLevel}`);
+  const currentNoFlags = useMemo(() => {
+    const arr = [];
+    if (noFlags.noCoriander) arr.push(t.noCoriander);
+    if (noFlags.noGreenOnion) arr.push(t.noGreenOnion);
+    if (noFlags.noPepper) arr.push(t.noPepper);
+    if (noFlags.noOnion) arr.push(t.noOnion);
+    return arr;
+  }, [noFlags, lang, t]);
+
+  const getItemAddons = (item) => {
+    if (!item) return [];
+
+    if (Array.isArray(item.addons)) {
+      return item.addons.map(normalizeAddon).filter((a) => a && a.active !== false);
     }
-    if (item.selectedOptions.phoType) {
-      if (item.selectedOptions.phoType === "tai") parts.push(t.rare);
-      if (item.selectedOptions.phoType === "chin") parts.push(t.wellDone);
-      if (item.selectedOptions.phoType === "taichin") parts.push(t.rareWellDone);
-    }
-    return parts.join(" • ");
+
+    const preset = item.addonsPreset || item.addons;
+    if (preset && addons[preset]) return addons[preset].filter((a) => a.active !== false);
+
+    if (item.category === "pho") return addons.pho || [];
+    if (item.category === "rice_soup_noodle" && item.optionType === "rice") return addons.rice || [];
+    if (item.category === "spicy_hotpot") return addons.spicy_hotpot || [];
+
+    return [];
   };
 
-  const getCartIdentity = (item, options) => {
-    const spicy = options?.spicyLevel ? `spicy-${options.spicyLevel}` : "spicy-none";
-    const pho = options?.phoType ? `pho-${options.phoType}` : "pho-none";
-    return `${item.id}-${spicy}-${pho}`;
-  };
-
-  const openOptionModal = (item) => {
+  const openItem = (item) => {
     if (!item.available) return;
-    setSelectedItem(item);
-    setSelectedSpicyLevel(1);
-    setSelectedPhoType(item.options?.phoType ? "tai" : "");
-    if (item.options?.spicyLevel || item.options?.phoType) {
-      setOptionModalOpen(true);
-    } else {
-      addToCartWithOptions(item, { spicyLevel: null, phoType: null });
+
+    setModalItem(item);
+    setModalQty(1);
+
+    if (item.optionType === "pho_brisket") setPhoType("rareBrisket");
+    else setPhoType("rare");
+
+    setRiceSpicy("notSpicy");
+    setHotpotSpicy("notSpicy");
+    setSelectedAddons({});
+    setItemNote("");
+  };
+
+  const toggleAddon = (addonId) => {
+    setSelectedAddons((prev) => ({ ...prev, [addonId]: !prev[addonId] }));
+  };
+
+  const buildOptionText = (item) => {
+    const parts = [];
+
+    if (item.optionType === "pho" || item.optionType === "pho_combo" || item.optionType === "pho_brisket") {
+      parts.push(getPhoTypeLabel(phoType, lang, t));
     }
+
+    if (item.optionType === "rice") {
+      parts.push(riceSpicy === "spicy" ? t.spicy : t.notSpicy);
+    }
+
+    if (item.optionType === "spicy") {
+      parts.push(hotpotSpicy === "spicy" ? t.spicy : t.notSpicy);
+    }
+
+    return parts.filter(Boolean).join(" • ");
   };
 
-  const closeOptionModal = () => {
-    setOptionModalOpen(false);
-    setSelectedItem(null);
-    setSelectedSpicyLevel(1);
-    setSelectedPhoType("");
+  const buildSelectedOptions = (item) => {
+    return {
+      phoType:
+        item.optionType === "pho" || item.optionType === "pho_combo" || item.optionType === "pho_brisket"
+          ? phoType
+          : null,
+      riceSpicy: item.optionType === "rice" ? riceSpicy : null,
+      hotpotSpicy: item.optionType === "spicy" ? hotpotSpicy : null
+    };
   };
 
-  const addToCartWithOptions = (item, options) => {
-    const identity = getCartIdentity(item, options);
+  const makeLineIdentity = (item, optionText, itemAddons, note) => {
+    const addText = itemAddons.map((a) => `${a.id}:${a.qty || 1}`).sort().join(",");
+    return `${item.id}__${optionText}__${addText}__${note || ""}`;
+  };
+
+  const addModalToCart = () => {
+    if (!modalItem) return;
+
+    const itemAddons = getItemAddons(modalItem)
+      .filter((a) => selectedAddons[a.id])
+      .map((a) => ({
+        id: a.id,
+        name: textByLang(a, lang),
+        name_vi: a.name_vi,
+        name_zh: a.name_zh,
+        name_en: a.name_en,
+        price: Number(a.price || 0),
+        qty: 1
+      }));
+
+    const addonsTotal = itemAddons.reduce((s, a) => s + Number(a.price || 0) * Number(a.qty || 1), 0);
+    const optionText = buildOptionText(modalItem);
+    const unitTotal = Number(modalItem.price || 0) + addonsTotal;
+    const identity = makeLineIdentity(modalItem, optionText, itemAddons, itemNote.trim());
+
+    const cartItem = {
+      lineId: `${identity}_${Date.now()}_${Math.random().toString(16).slice(2, 8)}`,
+      identity,
+      id: modalItem.id,
+      name: textByLang(modalItem, lang),
+      name_vi: modalItem.name_vi,
+      name_zh: modalItem.name_zh,
+      name_en: modalItem.name_en,
+      category: modalItem.category,
+      qty: modalQty,
+      price: Number(modalItem.price || 0),
+      optionText,
+      addons: itemAddons,
+      note: itemNote.trim(),
+      subtotal: unitTotal * modalQty,
+      selectedOptions: buildSelectedOptions(modalItem),
+      optionLabels: optionText ? [{ group: "Option", value: optionText }] : []
+    };
+
     setCart((prev) => {
-      const exist = prev.find((i) => i.identity === identity);
-      if (exist) {
-        return prev.map((i) => (i.identity === identity ? { ...i, qty: i.qty + 1 } : i));
+      const found = prev.find((x) => x.identity === identity);
+      if (!found) return [...prev, cartItem];
+
+      return prev.map((x) => {
+        if (x.identity !== identity) return x;
+        const newQty = x.qty + modalQty;
+        return {
+          ...x,
+          qty: newQty,
+          subtotal: unitTotal * newQty
+        };
+      });
+    });
+
+    setModalItem(null);
+  };
+
+  const addQuickAddon = (type) => {
+    const quick = addons.quick || FALLBACK_ADDONS.quick;
+    const addon = quick.find((a) => a.id === type);
+    if (!addon) return;
+
+    const lineId = `${addon.id}_${Date.now()}_${Math.random().toString(16).slice(2, 8)}`;
+    setCart((prev) => [
+      ...prev,
+      {
+        lineId,
+        identity: lineId,
+        id: addon.id,
+        name: textByLang(addon, lang),
+        name_vi: addon.name_vi,
+        name_zh: addon.name_zh,
+        name_en: addon.name_en,
+        category: "quick_addon",
+        qty: 1,
+        price: Number(addon.price || 0),
+        optionText: "",
+        addons: [],
+        note: "",
+        subtotal: Number(addon.price || 0),
+        selectedOptions: {},
+        optionLabels: []
       }
-      return [...prev, { ...item, identity, name: item.name_vi, qty: 1, selectedOptions: options }];
-    });
+    ]);
   };
 
-  const confirmAddWithOptions = () => {
-    if (!selectedItem) return;
-    addToCartWithOptions(selectedItem, {
-      spicyLevel: selectedItem.options?.spicyLevel ? selectedSpicyLevel : null,
-      phoType: selectedItem.options?.phoType ? selectedPhoType : null
-    });
-    closeOptionModal();
-  };
-
-  const decreaseItem = (item) => {
-    setCart((prev) => {
-      const exist = prev.find((i) => i.identity === item.identity);
-      if (!exist) return prev;
-      if (exist.qty === 1) return prev.filter((i) => i.identity !== item.identity);
-      return prev.map((i) => (i.identity === item.identity ? { ...i, qty: i.qty - 1 } : i));
-    });
-  };
-
-  const increaseItem = (item) => {
-    setCart((prev) => prev.map((i) => (i.identity === item.identity ? { ...i, qty: i.qty + 1 } : i)));
-  };
-
-  const removeFromCart = (item) => {
-    setCart((prev) => prev.filter((i) => i.identity !== item.identity));
-  };
+  const removeLine = (lineId) => setCart((prev) => prev.filter((i) => i.lineId !== lineId));
 
   const clearCart = () => setCart([]);
 
-  const buildVietnameseOrderName = (item) => {
-    let suffix = "";
-    if (item.selectedOptions?.spicyLevel) suffix += ` (Cay ${item.selectedOptions.spicyLevel})`;
-    if (item.selectedOptions?.phoType === "tai") suffix += " (Tái)";
-    if (item.selectedOptions?.phoType === "chin") suffix += " (Chín)";
-    if (item.selectedOptions?.phoType === "taichin") suffix += " (Tái + Chín)";
-    return `${item.name_vi}${suffix}`;
-  };
-
-  const order = async () => {
-    if (!hasValidTable) return alert(t.qrOnlyWarning);
-    if (cart.length === 0) return alert(t.chooseItemsFirst);
-
-    const itemsForBackend = cart.map((item) => ({
-      name: buildVietnameseOrderName(item),
-      qty: item.qty,
-      price: item.price
-    }));
+  const placeOrder = async () => {
+    if (!hasValidTable) return alert(t.scanQr);
+    if (cart.length === 0) return alert(t.empty);
 
     try {
       const res = await fetch(`${BACKEND_URL}/order`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ table, items: itemsForBackend })
+        body: JSON.stringify({ table, language: lang, items: cart, total, customerNote, note: customerNote, noIngredients: currentNoFlags })
       });
       const data = await res.json();
+
       if (data.success) {
         alert(t.success);
         setCart([]);
+        setCustomerNote("");
+        setStaffMessage("");
+        setNoFlags({ noCoriander: false, noGreenOnion: false, noPepper: false, noOnion: false });
       } else {
-        alert(t.fail);
+        alert(data.message || t.fail);
       }
     } catch {
       alert(t.backendError);
     }
   };
 
-  const openStaffModal = (preset = "") => {
-    if (!hasValidTable) return alert(t.staffNeedQR);
-    setStaffMessage(preset);
-    setStaffModalOpen(true);
-  };
-
-  const closeStaffModal = () => {
-    setStaffModalOpen(false);
-    setStaffMessage("");
-    setSendingStaffMessage(false);
-  };
-
-  const sendStaffRequest = async () => {
-    if (!hasValidTable) return alert(t.staffNeedQR);
-    if (!staffMessage.trim()) return;
+  const sendStaff = async () => {
+    if (!hasValidTable) return alert(t.scanQr);
 
     try {
-      setSendingStaffMessage(true);
       const res = await fetch(`${BACKEND_URL}/call-staff`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ table, message: staffMessage.trim() })
+        body: JSON.stringify({ table, message: staffMessage || "Khách cần hỗ trợ", flags: currentNoFlags })
       });
       const data = await res.json();
       if (data.success) {
-        alert(t.staffSent);
-        closeStaffModal();
+        alert(lang === "zh" ? "已送出" : lang === "en" ? "Sent" : "Đã gửi");
+        setStaffMessage("");
       } else {
         alert(t.fail);
-        setSendingStaffMessage(false);
       }
     } catch {
       alert(t.backendError);
-      setSendingStaffMessage(false);
     }
   };
 
+  const renderMenuCard = (item) => (
+    <article className="menu-card" key={item.id}>
+      {item.image ? <img src={item.image} alt={textByLang(item, lang)} /> : <div className="menu-img-fallback">GOKA</div>}
+      <div className="menu-body">
+        <h3>{textByLang(item, lang)}</h3>
+        <p>{descByLang(item, lang)}</p>
+        <div className="price-line">
+          <b>{money(item.price)}</b>
+          {!item.available && <span>{t.soldOut}</span>}
+        </div>
+        <button disabled={!item.available} onClick={() => openItem(item)}>
+          {item.available ? t.add : t.soldOut}
+        </button>
+      </div>
+    </article>
+  );
+
+  const groupedSections = useMemo(() => {
+    return visibleCategories
+      .map((cat) => ({
+        cat,
+        items: filteredMenu.filter((item) => item.category === cat.id)
+      }))
+      .filter((section) => section.items.length > 0);
+  }, [visibleCategories, filteredMenu]);
+
   return (
     <div className="app">
-      <header className="hero">
-        <div className="hero-overlay">
-          <h1>{t.title}</h1>
-          <p>{t.subtitle}</p>
+      <header className="brand-hero">
+        <div className="brand-logo">
+          <div className="logo-mark">G</div>
+          <div>
+            <h1>{settings.logoTitle || "Goka phở & mỳ cay"}</h1>
+            <p>{lang === "vi" ? settings.subtitle_vi : lang === "zh" ? settings.subtitle_zh : settings.subtitle_en}</p>
+          </div>
+        </div>
+        <div className="lang-switch">
+          <button className={lang === "vi" ? "active" : ""} onClick={() => setLang("vi")}>VI</button>
+          <button className={lang === "zh" ? "active" : ""} onClick={() => setLang("zh")}>中文</button>
+          <button className={lang === "en" ? "active" : ""} onClick={() => setLang("en")}>EN</button>
         </div>
       </header>
 
-      <main className="main-layout">
-        <section className="content">
-          <div className="top-bar">
-            <div className="language-box">
-              <button className={lang === "vi" ? "lang-btn active" : "lang-btn"} onClick={() => setLang("vi")}>VI</button>
-              <button className={lang === "zh" ? "lang-btn active" : "lang-btn"} onClick={() => setLang("zh")}>繁</button>
-              <button className={lang === "en" ? "lang-btn active" : "lang-btn"} onClick={() => setLang("en")}>EN</button>
-            </div>
-            <div className="table-box">
-              {hasValidTable ? <div className="table-fixed"><strong>{t.tableLabel}:</strong> {table}</div> : <div className="table-warning">{t.qrOnlyWarning}</div>}
-            </div>
+      <main className="layout">
+        <section className="menu-area">
+          <div className="table-banner">
+            {hasValidTable ? (
+              <span>{table === "takeaway" ? t.takeaway : t.table}: <b>{table}</b></span>
+            ) : (
+              <span>{t.scanQr}</span>
+            )}
           </div>
 
-          <section className="staff-tools">
-            <div className="staff-card">
-              <h3>{t.callStaff}</h3>
-              <p>{lang === "vi" ? "Cần thêm chén, muỗng, nước hoặc tính tiền?" : lang === "zh" ? "需要碗、餐具、水或結帳？" : "Need bowls, utensils, water, or the bill?"}</p>
-              <div className="quick-actions">
-                <button onClick={() => openStaffModal(t.quickBowl)}>{t.quickBowl}</button>
-                <button onClick={() => openStaffModal(t.quickSpoon)}>{t.quickSpoon}</button>
-                <button onClick={() => openStaffModal(t.quickWater)}>{t.quickWater}</button>
-                <button onClick={() => openStaffModal(t.quickBill)}>{t.quickBill}</button>
+          <input className="search" value={search} onChange={(e) => setSearch(e.target.value)} placeholder={t.search} />
+
+          {featuredMenu.length > 0 && (
+            <section className="featured">
+              <h2>{t.featured}</h2>
+              <div className="featured-row">
+                {featuredMenu.slice(0, 8).map((item) => (
+                  <button key={item.id} className="featured-pill" onClick={() => openItem(item)}>
+                    {textByLang(item, lang)} <b>{money(item.price)}</b>
+                  </button>
+                ))}
               </div>
-              <button className="staff-main-btn" onClick={() => openStaffModal("")}>{t.messageStaff}</button>
-            </div>
-          </section>
+            </section>
+          )}
 
-          <section className="featured-section">
-            <h2>{t.featured}</h2>
-            <div className="featured-grid">
-              {featuredMenu.map((item) => (
-                <div className="featured-card" key={`featured-${item.id}`}>
-                  <img src={item.image} alt={getItemName(item)} />
-                  <div className="featured-card-body">
-                    <h3>{getItemName(item)}</h3>
-                    <p className="featured-price">{item.price.toLocaleString()} NT$</p>
-                    <small>{getItemDesc(item)}</small>
-                    <button disabled={!item.available} className={!item.available ? "disabled-btn" : ""} onClick={() => openOptionModal(item)}>{item.available ? t.add : t.soldOut}</button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </section>
-
-          <div className="category-tabs">
-            {Object.keys(t.categories).map((cat) => (
-              <button key={cat} className={category === cat ? "tab active" : "tab"} onClick={() => setCategory(cat)}>{t.categories[cat]}</button>
+          <div className="tabs">
+            <button className={category === "all" ? "active" : ""} onClick={() => setCategory("all")}>{t.all}</button>
+            {visibleCategories.map((cat) => (
+              <button key={cat.id} className={category === cat.id ? "active" : ""} onClick={() => setCategory(cat.id)}>
+                {textByLang(cat, lang)}
+              </button>
             ))}
           </div>
 
-<section className="community-section">
-  <div className="community-grid">
-    <div className="community-card free-card">
-      <h3>{communityText.freeTitle}</h3>
-      <p>{communityText.freeDesc}</p>
-      <div className="community-count">
-        {communityText.freeRemaining} {communityStatus.dailyFreeAvailable}
-      </div>
-      <button
-        className="community-btn"
-        onClick={orderCommunityFreePho}
-        disabled={communityLoading || communityStatus.dailyFreeAvailable <= 0}
-      >
-        {communityStatus.dailyFreeAvailable > 0
-          ? communityText.freeButton
-          : communityText.freeSoldOut}
-      </button>
-    </div>
-
-    <div className="community-card sponsor-card">
-      <h3>{communityText.sponsorTitle}</h3>
-      <p>{communityText.sponsorDesc}</p>
-      <div className="community-count">
-        {communityText.sponsorTotal} {communityStatus.totalSponsored}
-      </div>
-      <div className="community-price">150 NT$ / {communityText.priceUnit}</div>
-      <button
-        className="community-btn"
-        onClick={sponsorCommunityPho}
-        disabled={communityLoading}
-      >
-        {communityText.sponsorButton}
-      </button>
-    </div>
-  </div>
-</section>
-
-          <section className="menu-grid">
-            {filteredMenu.map((item) => {
-              const cartCount = cart.filter((i) => i.id === item.id).reduce((sum, i) => sum + i.qty, 0);
-              return (
-                <div className="menu-card" key={item.id}>
-                  <img src={item.image} alt={getItemName(item)} />
-                  <div className="menu-card-body">
-                    <h3>{getItemName(item)}</h3>
-                    <p className="price">{item.price.toLocaleString()} NT$</p>
-                    <small className="desc">{getItemDesc(item)}</small>
-                    {item.options?.spicyLevel && <div className="option-hint">🌶 1 - 7</div>}
-                    {item.options?.phoType && <div className="option-hint">🥩 {t.rare} / {t.wellDone} / {t.rareWellDone}</div>}
-                    {item.available ? (
-                      <div className="card-actions">
-                        <button className="open-options-btn" onClick={() => openOptionModal(item)}>{t.add}</button>
-                        <span className="qty-badge total-badge">{cartCount}</span>
-                      </div>
-                    ) : <div className="sold-out-badge">{t.soldOut}</div>}
-                  </div>
-                </div>
-              );
-            })}
-          </section>
+          {category === "all" ? (
+            groupedSections.map((section) => (
+              <section className="category-section" key={section.cat.id}>
+                <h2>{textByLang(section.cat, lang)}</h2>
+                <div className="menu-grid">{section.items.map(renderMenuCard)}</div>
+              </section>
+            ))
+          ) : (
+            <section className="category-section">
+              <h2>{textByLang(visibleCategories.find((c) => c.id === category), lang) || t.menu}</h2>
+              <div className="menu-grid">{filteredMenu.map(renderMenuCard)}</div>
+            </section>
+          )}
         </section>
 
-        <aside className="cart-panel">
+        <aside className="checkout">
+          <h2>{t.checkout}</h2>
+
           <div className="cart-box">
-            <h2>🛒 {t.cart}</h2>
-            {cart.length === 0 ? <p className="empty-cart">{t.emptyCart}</p> : (
-              <>
-                <div className="cart-list">
-                  {cart.map((item) => (
-                    <div className="cart-item" key={item.identity}>
-                      <div className="cart-item-info">
-                        <strong>{getItemName(item)}</strong>
-                        {getOptionLabel(item) && <small className="cart-option-line">{getOptionLabel(item)}</small>}
-                        <span>{item.qty} x {item.price.toLocaleString()} NT$</span>
-                      </div>
-                      <div className="cart-item-actions">
-                        <button onClick={() => decreaseItem(item)}>−</button>
-                        <button onClick={() => increaseItem(item)}>+</button>
-                        <button onClick={() => removeFromCart(item)}>✕</button>
-                      </div>
-                    </div>
-                  ))}
+            <h3>🛒 {t.cart}</h3>
+            {cart.length === 0 ? (
+              <p className="muted">{t.empty}</p>
+            ) : (
+              cart.map((line) => (
+                <div className="cart-line" key={line.lineId}>
+                  <div>
+                    <b>{line.name}</b>
+                    {line.optionText && <small>{line.optionText}</small>}
+                    {line.addons?.map((a) => (
+                      <small key={a.id}>+ {textByLang(a, lang)} {money(a.price)}</small>
+                    ))}
+                    {line.note && <small>Note: {line.note}</small>}
+                    <span>x{line.qty} - {money(line.subtotal)}</span>
+                  </div>
+                  <button onClick={() => removeLine(line.lineId)}>✕</button>
                 </div>
-                <div className="cart-footer">
-                  <div className="total-line"><span>{t.total}</span><strong>{total.toLocaleString()} NT$</strong></div>
-                  <button className="clear-btn" onClick={clearCart}>{t.clear}</button>
-                  <button className="order-btn" onClick={order} disabled={!hasValidTable}>{hasValidTable ? t.order : t.qrToOrder}</button>
-                </div>
-              </>
+              ))
             )}
+          </div>
+
+          <div className="quick-add-box">
+            <h3>{t.quickAdd}</h3>
+            <div className="quick-add-grid">
+              <button onClick={() => addQuickAddon("quick_extra_rice")}>{t.extraRice} +20</button>
+              <button onClick={() => addQuickAddon("quick_extra_noodle")}>{t.extraNoodle} +20</button>
+              <button onClick={() => addQuickAddon("quick_extra_meat")}>{t.extraMeat} +70</button>
+              <button onClick={() => addQuickAddon("quick_extra_shrimp")}>{t.extraShrimp} +60</button>
+            </div>
+          </div>
+
+          <textarea className="note" value={customerNote} onChange={(e) => setCustomerNote(e.target.value)} placeholder={t.notePlaceholder} />
+
+          <div className="flags">
+            <label><input type="checkbox" checked={noFlags.noCoriander} onChange={(e) => setNoFlags({ ...noFlags, noCoriander: e.target.checked })} />{t.noCoriander}</label>
+            <label><input type="checkbox" checked={noFlags.noGreenOnion} onChange={(e) => setNoFlags({ ...noFlags, noGreenOnion: e.target.checked })} />{t.noGreenOnion}</label>
+            <label><input type="checkbox" checked={noFlags.noPepper} onChange={(e) => setNoFlags({ ...noFlags, noPepper: e.target.checked })} />{t.noPepper}</label>
+            <label><input type="checkbox" checked={noFlags.noOnion} onChange={(e) => setNoFlags({ ...noFlags, noOnion: e.target.checked })} />{t.noOnion}</label>
+          </div>
+
+          <div className="total">
+            <span>{t.total}</span>
+            <b>{money(total)}</b>
+          </div>
+
+          <button className="order-btn" onClick={placeOrder}>{t.order}</button>
+          <button className="clear-btn" onClick={clearCart}>{t.clear}</button>
+
+          <div className="staff-box">
+            <h3>{t.staffTitle}</h3>
+            <textarea value={staffMessage} onChange={(e) => setStaffMessage(e.target.value)} placeholder={t.staffPlaceholder} />
+            <button onClick={sendStaff}>{t.sendStaff}</button>
           </div>
         </aside>
       </main>
 
-      {optionModalOpen && selectedItem && (
-        <div className="modal-overlay" onClick={closeOptionModal}>
-          <div className="modal-box" onClick={(e) => e.stopPropagation()}>
-            <h2>{getItemName(selectedItem)}</h2>
-            <p className="modal-desc">{getItemDesc(selectedItem)}</p>
-            {selectedItem.options?.spicyLevel && (
-              <div className="modal-section">
-                <h3>{t.spicyLevelTitle}</h3>
-                <div className="level-grid">
-                  {[1,2,3,4,5,6,7].map((level) => (
-                    <button key={level} className={selectedSpicyLevel === level ? "level-btn active" : "level-btn"} onClick={() => setSelectedSpicyLevel(level)}>{level}</button>
-                  ))}
-                </div>
-              </div>
-            )}
-            {selectedItem.options?.phoType && (
-              <div className="modal-section">
-                <h3>{t.phoTypeTitle}</h3>
-                <div className="pho-type-grid">
-                  <button className={selectedPhoType === "tai" ? "pho-type-btn active" : "pho-type-btn"} onClick={() => setSelectedPhoType("tai")}>{t.rare}</button>
-                  <button className={selectedPhoType === "chin" ? "pho-type-btn active" : "pho-type-btn"} onClick={() => setSelectedPhoType("chin")}>{t.wellDone}</button>
-                  <button className={selectedPhoType === "taichin" ? "pho-type-btn active" : "pho-type-btn"} onClick={() => setSelectedPhoType("taichin")}>{t.rareWellDone}</button>
-                </div>
-              </div>
-            )}
-            <div className="modal-actions">
-              <button className="cancel-btn" onClick={closeOptionModal}>{t.cancel}</button>
-              <button className="confirm-btn" onClick={confirmAddWithOptions}>{t.confirmAdd}</button>
-            </div>
-          </div>
-        </div>
-      )}
+      {modalItem && (
+        <div className="modal-bg" onClick={() => setModalItem(null)}>
+          <div className="modal" onClick={(e) => e.stopPropagation()}>
+            <h2>{textByLang(modalItem, lang)}</h2>
+            <p>{descByLang(modalItem, lang)}</p>
 
-      {staffModalOpen && (
-        <div className="modal-overlay" onClick={closeStaffModal}>
-          <div className="modal-box" onClick={(e) => e.stopPropagation()}>
-            <h2>{t.messageStaff}</h2>
-            <div className="modal-section">
-              <h3>{t.quickActionsTitle}</h3>
-              <div className="quick-actions">
-                <button onClick={() => setStaffMessage(t.quickBowl)}>{t.quickBowl}</button>
-                <button onClick={() => setStaffMessage(t.quickSpoon)}>{t.quickSpoon}</button>
-                <button onClick={() => setStaffMessage(t.quickWater)}>{t.quickWater}</button>
-                <button onClick={() => setStaffMessage(t.quickBill)}>{t.quickBill}</button>
-              </div>
+            <div className="qty">
+              <span>{t.qty}</span>
+              <button onClick={() => setModalQty(Math.max(1, modalQty - 1))}>-</button>
+              <b>{modalQty}</b>
+              <button onClick={() => setModalQty(modalQty + 1)}>+</button>
             </div>
-            <textarea className="staff-textarea" placeholder={t.staffPlaceholder} value={staffMessage} onChange={(e) => setStaffMessage(e.target.value)} />
+
+            {(modalItem.optionType === "pho" || modalItem.optionType === "pho_combo" || modalItem.optionType === "pho_brisket") && (
+              <div className="option-block">
+                <h3>{t.optionPho}</h3>
+                {modalItem.optionType !== "pho_brisket" && (
+                  <>
+                    <button className={phoType === "rare" ? "active" : ""} onClick={() => setPhoType("rare")}>{t.rare}</button>
+                    <button className={phoType === "wellDone" ? "active" : ""} onClick={() => setPhoType("wellDone")}>{t.wellDone}</button>
+                  </>
+                )}
+                {modalItem.optionType === "pho_combo" && (
+                  <button className={phoType === "rareCooked" ? "active" : ""} onClick={() => setPhoType("rareCooked")}>{t.rareCooked}</button>
+                )}
+                {modalItem.optionType === "pho_brisket" && (
+                  <>
+                    <button className={phoType === "rareBrisket" ? "active" : ""} onClick={() => setPhoType("rareBrisket")}>{t.rareBrisket}</button>
+                    <button className={phoType === "cookedBrisket" ? "active" : ""} onClick={() => setPhoType("cookedBrisket")}>{t.cookedBrisket}</button>
+                  </>
+                )}
+              </div>
+            )}
+
+            {modalItem.optionType === "rice" && (
+              <div className="option-block">
+                <h3>{t.spicyRice}</h3>
+                <button className={riceSpicy === "notSpicy" ? "active" : ""} onClick={() => setRiceSpicy("notSpicy")}>{t.notSpicy}</button>
+                <button className={riceSpicy === "spicy" ? "active" : ""} onClick={() => setRiceSpicy("spicy")}>{t.spicy}</button>
+              </div>
+            )}
+
+            {modalItem.optionType === "spicy" && (
+              <div className="option-block">
+                <h3>{t.spicyLevel}</h3>
+                <button className={hotpotSpicy === "notSpicy" ? "active" : ""} onClick={() => setHotpotSpicy("notSpicy")}>{t.notSpicy}</button>
+                <button className={hotpotSpicy === "spicy" ? "active" : ""} onClick={() => setHotpotSpicy("spicy")}>{t.spicy}</button>
+              </div>
+            )}
+
+            <div className="option-block">
+              <h3>{t.addons}</h3>
+              {getItemAddons(modalItem).length === 0 && <p className="muted">-</p>}
+              {getItemAddons(modalItem).map((a) => (
+                <label className="addon" key={a.id}>
+                  <input type="checkbox" checked={!!selectedAddons[a.id]} onChange={() => toggleAddon(a.id)} />
+                  {textByLang(a, lang)} <b>{money(a.price)}</b>
+                </label>
+              ))}
+            </div>
+
+            <textarea className="note" value={itemNote} onChange={(e) => setItemNote(e.target.value)} placeholder={t.itemNote} />
+
             <div className="modal-actions">
-              <button className="cancel-btn" onClick={closeStaffModal}>{t.cancel}</button>
-              <button className="confirm-btn" onClick={sendStaffRequest} disabled={sendingStaffMessage}>{sendingStaffMessage ? t.loading : t.sendMessage}</button>
+              <button onClick={() => setModalItem(null)}>{t.cancel}</button>
+              <button className="order-btn" onClick={addModalToCart}>{t.confirmAdd}</button>
             </div>
           </div>
         </div>

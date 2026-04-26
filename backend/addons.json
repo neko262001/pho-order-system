@@ -1,0 +1,69 @@
+[
+  {
+    "id": "extra_pho",
+    "vi": "Thêm bánh phở",
+    "zh": "加河粉",
+    "en": "Extra Pho Noodles",
+    "price": 20,
+    "appliesTo": [
+      "pho"
+    ],
+    "active": true
+  },
+  {
+    "id": "extra_rice",
+    "vi": "Thêm cơm",
+    "zh": "加飯",
+    "en": "Extra Rice",
+    "price": 20,
+    "appliesTo": [
+      "rice"
+    ],
+    "active": true
+  },
+  {
+    "id": "extra_egg",
+    "vi": "Thêm trứng",
+    "zh": "加蛋",
+    "en": "Extra Egg",
+    "price": 20,
+    "appliesTo": [
+      "rice"
+    ],
+    "active": true
+  },
+  {
+    "id": "extra_noodle",
+    "vi": "Thêm mỳ",
+    "zh": "加麵",
+    "en": "Extra Noodles",
+    "price": 20,
+    "appliesTo": [
+      "spicy"
+    ],
+    "active": true
+  },
+  {
+    "id": "extra_meat",
+    "vi": "Thêm thịt",
+    "zh": "加肉",
+    "en": "Extra Meat",
+    "price": 70,
+    "appliesTo": [
+      "pho",
+      "spicy"
+    ],
+    "active": true
+  },
+  {
+    "id": "extra_shrimp",
+    "vi": "Thêm tôm",
+    "zh": "加蝦",
+    "en": "Extra Shrimp",
+    "price": 60,
+    "appliesTo": [
+      "spicy"
+    ],
+    "active": true
+  }
+]
