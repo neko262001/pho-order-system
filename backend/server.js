@@ -113,25 +113,24 @@ const DEFAULT_MENU_DATA = {
       addonsPreset: "spicy_hotpot"
     },
     {
-      id: "spicy_seafood",
-      category: "spicy_hotpot",
-      name_vi: "Mỳ cay hải sản",
-      name_zh: "海鮮部隊鍋",
-      name_en: "Seafood Spicy Hot Pot",
-      description_vi: "Mực, 2 con tôm, bắp cải tím, xúc xích, cá viên, bò viên, bánh gạo, nấm kim châm, bông cải,
-        kimchi",
-      description_zh: "花枝、2隻蝦、紫色甘藍、熱狗3片、魚丸1、貢丸2-3片、年糕2、金針菇、花椰菜1、泡菜",
-      description_en: "Squid, 2 shrimp, purple cabbage, sausage, fish ball, meatballs, rice cakes, enoki mushroom,
-        broccoli, kimchi",
-      price: 170,
-      featured: true,
-      available: true,
-      sortOrder: 2,
-      image: "",
-      optionType: "spicy",
-      addonsPreset: "spicy_hotpot"
-    },
-    {
+  id: "mycay-haisan",
+  category: "my-cay",
+  name_vi: "Mỳ cay hải sản",
+  name_zh: "海鮮部隊鍋",
+  name_en: "Seafood Hotpot Noodles",
+  price: 170,
+  available: true,
+  featured: true,
+  image: "/images/mycay-haisan.jpg",
+  description_vi: "Mực, 2 con tôm, bắp cải tím, xúc xích, cá viên, bò viên, bánh gạo, nấm kim châm, bông cải, kimchi",
+  description_zh: "花枝、2隻蝦、紫色甘藍、熱狗、魚丸、貢丸、年糕、金針菇、花椰菜、泡菜",
+  description_en: "Squid, 2 shrimp, purple cabbage, sausage, fish ball, beef ball, rice cake, enoki mushroom, broccoli, kimchi",
+  sortOrder: 2,
+  optionType: "spicy",
+  addonsPreset: "spicy_hotpot"
+  },
+  
+ {
       id: "spicy_pork",
       category: "spicy_hotpot",
       name_vi: "Mỳ cay heo",
@@ -139,8 +138,7 @@ const DEFAULT_MENU_DATA = {
       name_en: "Pork Spicy Hot Pot",
       description_vi: "Heo lát, bắp cải tím, xúc xích, cá viên, bò viên, bánh gạo, nấm kim châm, bông cải, kimchi",
       description_zh: "豬肉片4、紫色甘藍、熱狗3片、魚丸1、貢丸2-3片、年糕2、金針菇、花椰菜1、泡菜",
-      description_en: "Pork slices, purple cabbage, sausage, fish ball, meatballs, rice cakes, enoki mushroom,
-        broccoli, kimchi",
+      description_en: "Pork slices, purple cabbage, sausage, fish ball, meatballs, rice cakes, enoki mushroom, broccoli, kimchi",
       price: 150,
       featured: false,
       available: true,
@@ -149,6 +147,7 @@ const DEFAULT_MENU_DATA = {
       optionType: "spicy",
       addonsPreset: "spicy_hotpot"
     },
+
     {
       id: "spicy_beef",
       category: "spicy_hotpot",
@@ -333,61 +332,43 @@ const DEFAULT_MENU_DATA = {
     { id: "drink_cocoa_milk", category: "drinks", name_vi: "Ca cao sữa", name_zh: "可可牛奶", name_en: "Cocoa Milk",
       description_vi: "Ca cao sữa", description_zh: "可可牛奶", description_en: "Cocoa milk", price: 65, featured:
       false, available: true, sortOrder: 40, image: "", optionType: "", addonsPreset: "" },
-    { id: "drink_taro_milk", category: "drinks", name_vi: "Trà sữa khoai môn", name_zh: "芋香牛奶", name_en: "Taro Milk
-      Tea", description_vi: "Trà sữa khoai môn", description_zh: "芋香牛奶", description_en: "Taro milk tea", price: 65,
-      featured: false, available: true, sortOrder: 41, image: "", optionType: "", addonsPreset: "" },
-    { id: "drink_americano", category: "drinks", name_vi: "Americano", name_zh: "經典美式", name_en: "Americano",
-      description_vi: "Cà phê Americano", description_zh: "經典美式咖啡", description_en: "Classic Americano", price: 50,
-      featured: false, available: true, sortOrder: 42, image: "", optionType: "", addonsPreset: "" },
-    { id: "drink_black_coffee", category: "drinks", name_vi: "Cà phê nguyên chất", name_zh: "特濃", name_en: "Strong
-      Black Coffee", description_vi: "Cà phê nguyên chất", description_zh: "特濃咖啡", description_en: "Strong coffee",
-      price: 50, featured: false, available: true, sortOrder: 43, image: "", optionType: "", addonsPreset: "" },
-    { id: "drink_latte", category: "drinks", name_vi: "Latte", name_zh: "拿鐵", name_en: "Latte", description_vi:
-      "Latte", description_zh: "拿鐵", description_en: "Latte", price: 65, featured: false, available: true,
-      sortOrder: 44, image: "", optionType: "", addonsPreset: "" },
-    { id: "drink_vn_milk_coffee", category: "drinks", name_vi: "Cà phê sữa Việt Nam", name_zh: "越式煉乳咖啡", name_en:
-      "Vietnamese Condensed Milk Coffee", description_vi: "Cà phê sữa", description_zh: "越式煉乳咖啡", description_en:
-      "Vietnamese milk coffee", price: 65, featured: false, available: true, sortOrder: 45, image: "", optionType:
-      "", addonsPreset: "" },
-    { id: "drink_salt_coffee", category: "drinks", name_vi: "Cà phê muối", name_zh: "鹹咖啡", name_en: "Salt Coffee",
-      description_vi: "Cà phê muối", description_zh: "鹹咖啡", description_en: "Salt coffee", price: 80, featured:
-      false, available: true, sortOrder: 46, image: "", optionType: "", addonsPreset: "" },
-
-    { id: "fried_combo", category: "fried", name_vi: "Combo đồ rán", name_zh: "炸物拼盤", name_en: "Fried Combo
-      Platter", description_vi: "Combo đồ rán tổng hợp", description_zh: "炸物拼盤", description_en: "Mixed fried
-      platter", price: 200, featured: false, available: true, sortOrder: 50, image: "", optionType: "",
-      addonsPreset: "" },
-    { id: "fried_qq", category: "fried", name_vi: "QQ棒", name_zh: "QQ棒", name_en: "QQ Stick", description_vi: "QQ棒
-      này ngon nè", description_zh: "QQ棒", description_en: "QQ stick snack", price: 50, featured: false, available:
-      true, sortOrder: 51, image: "", optionType: "", addonsPreset: "" },
-    { id: "fried_tempura", category: "fried", name_vi: "Tempura", name_zh: "甜不辣", name_en: "Tempura",
-      description_vi: "Tempura chiên", description_zh: "甜不辣", description_en: "Fried tempura", price: 35, featured:
-      false, available: true, sortOrder: 52, image: "", optionType: "", addonsPreset: "" },
-    { id: "fried_silver_roll", category: "fried", name_vi: "Ngân ti quyển", name_zh: "銀絲卷", name_en: "Silver Thread
-      Roll", description_vi: "Bánh cuộn chiên", description_zh: "銀絲卷", description_en: "Fried silver thread roll",
-      price: 50, featured: false, available: true, sortOrder: 53, image: "", optionType: "", addonsPreset: "" },
-    { id: "fried_fries", category: "fried", name_vi: "Khoai tây chiên", name_zh: "黃金薯條", name_en: "French Fries",
-      description_vi: "Khoai tây chiên vàng", description_zh: "黃金薯條", description_en: "Golden fries", price: 45,
-      featured: false, available: true, sortOrder: 54, image: "", optionType: "", addonsPreset: "" },
-    { id: "fried_nuggets", category: "fried", name_vi: "Gà viên", name_zh: "麥克雞塊", name_en: "Chicken Nuggets",
-      description_vi: "Gà viên kiểu McNuggets", description_zh: "麥克雞塊", description_en: "Chicken nuggets", price:
-      45, featured: false, available: true, sortOrder: 55, image: "", optionType: "", addonsPreset: "" },
-    { id: "fried_karaage", category: "fried", name_vi: "Gà karaage", name_zh: "唐揚雞", name_en: "Karaage Chicken",
-      description_vi: "Gà viên chiên kiểu Nhật", description_zh: "唐揚雞", description_en: "Japanese fried chicken",
-      price: 50, featured: false, available: true, sortOrder: 56, image: "", optionType: "", addonsPreset: "" },
-    { id: "fried_onion_ring", category: "fried", name_vi: "Hành vòng chiên", name_zh: "洋蔥圈", name_en: "Onion Rings",
-      description_vi: "Hành rán", description_zh: "洋蔥圈", description_en: "Fried onion rings", price: 45, featured:
-      false, available: true, sortOrder: 57, image: "", optionType: "", addonsPreset: "" },
-
-    { id: "vn_spring_roll", category: "vietnamese_fried", name_vi: "Nem rán Việt Nam (3 cái)", name_zh: "炸春捲（3個）",
-      name_en: "Vietnamese Fried Spring Rolls (3 pcs)", description_vi: "Nem rán 3 cái", description_zh: "炸春捲三個",
-      description_en: "Three Vietnamese fried spring rolls", price: 120, featured: false, available: true,
-      sortOrder: 60, image: "", optionType: "", addonsPreset: "" },
-    { id: "vn_skewer", category: "vietnamese_fried", name_vi: "Xiên bẩn", name_zh: "越式炸串", name_en: "Vietnamese
-      Fried Skewers", description_vi: "Xiên ăn vặt Việt Nam", description_zh: "越式炸串", description_en: "Vietnamese
-      street-style fried skewers", price: 100, featured: false, available: true, sortOrder: 61, image: "",
-      optionType: "", addonsPreset: "" }
-  ]
+    { id: "drink_taro_milk", category: "drinks", name_vi: "Trà sữa khoai môn", name_zh: "芋香牛奶", name_en: "Taro Milk Tea", description_vi: "Trà sữa khoai môn", description_zh: "芋香牛奶", description_en: "Taro milk tea", price: 65,
+  featured: false, available: true, sortOrder: 41, image: "", optionType: "", addonsPreset: "" },
+{ id: "drink_americano", category: "drinks", name_vi: "Americano", name_zh: "經典美式", name_en: "Americano",
+  description_vi: "Cà phê Americano", description_zh: "經典美式咖啡", description_en: "Classic Americano", price: 50,
+  featured: false, available: true, sortOrder: 42, image: "", optionType: "", addonsPreset: "" },
+{ id: "drink_black_coffee", category: "drinks", name_vi: "Cà phê nguyên chất", name_zh: "特濃", name_en: "Strong Black Coffee", description_vi: "Cà phê nguyên chất", description_zh: "特濃咖啡", description_en: "Strong coffee",
+  price: 50, featured: false, available: true, sortOrder: 43, image: "", optionType: "", addonsPreset: "" },
+{ id: "drink_latte", category: "drinks", name_vi: "Latte", name_zh: "拿鐵", name_en: "Latte", description_vi: "Latte", description_zh: "拿鐵", description_en: "Latte", price: 65, featured: false, available: true,
+  sortOrder: 44, image: "", optionType: "", addonsPreset: "" },
+{ id: "drink_vn_milk_coffee", category: "drinks", name_vi: "Cà phê sữa Việt Nam", name_zh: "越式煉乳咖啡", name_en: "Vietnamese Condensed Milk Coffee", description_vi: "Cà phê sữa", description_zh: "越式煉乳咖啡", description_en: "Vietnamese milk coffee", price: 65, featured: false, available: true, sortOrder: 45, image: "", optionType: "", addonsPreset: "" },
+{ id: "drink_salt_coffee", category: "drinks", name_vi: "Cà phê muối", name_zh: "鹹咖啡", name_en: "Salt Coffee",
+  description_vi: "Cà phê muối", description_zh: "鹹咖啡", description_en: "Salt coffee", price: 80, featured: false, available: true, sortOrder: 46, image: "", optionType: "", addonsPreset: "" },
+ 
+{ id: "fried_combo", category: "fried", name_vi: "Combo đồ rán", name_zh: "炸物拼盤", name_en: "Fried Combo Platter", description_vi: "Combo đồ rán tổng hợp", description_zh: "炸物拼盤", description_en: "Mixed fried platter", price: 200, featured: false, available: true, sortOrder: 50, image: "", optionType: "", addonsPreset: "" },
+{ id: "fried_qq", category: "fried", name_vi: "QQ棒", name_zh: "QQ棒", name_en: "QQ Stick", description_vi: "QQ棒 này ngon nè", description_zh: "QQ棒", description_en: "QQ stick snack", price: 50, featured: false, available: true, sortOrder: 51, image: "", optionType: "", addonsPreset: "" },
+{ id: "fried_tempura", category: "fried", name_vi: "Tempura", name_zh: "甜不辣", name_en: "Tempura",
+  description_vi: "Tempura chiên", description_zh: "甜不辣", description_en: "Fried tempura", price: 35, featured: false, available: true, sortOrder: 52, image: "", optionType: "", addonsPreset: "" },
+{ id: "fried_silver_roll", category: "fried", name_vi: "Ngân ti quyển", name_zh: "銀絲卷", name_en: "Silver Thread Roll", description_vi: "Bánh cuộn chiên", description_zh: "銀絲卷", description_en: "Fried silver thread roll",
+  price: 50, featured: false, available: true, sortOrder: 53, image: "", optionType: "", addonsPreset: "" },
+{ id: "fried_fries", category: "fried", name_vi: "Khoai tây chiên", name_zh: "黃金薯條", name_en: "French Fries",
+  description_vi: "Khoai tây chiên vàng", description_zh: "黃金薯條", description_en: "Golden fries", price: 45,
+  featured: false, available: true, sortOrder: 54, image: "", optionType: "", addonsPreset: "" },
+{ id: "fried_nuggets", category: "fried", name_vi: "Gà viên", name_zh: "麥克雞塊", name_en: "Chicken Nuggets",
+  description_vi: "Gà viên kiểu McNuggets", description_zh: "麥克雞塊", description_en: "Chicken nuggets", price: 45, featured: false, available: true, sortOrder: 55, image: "", optionType: "", addonsPreset: "" },
+{ id: "fried_karaage", category: "fried", name_vi: "Gà karaage", name_zh: "唐揚雞", name_en: "Karaage Chicken",
+  description_vi: "Gà viên chiên kiểu Nhật", description_zh: "唐揚雞", description_en: "Japanese fried chicken",
+  price: 50, featured: false, available: true, sortOrder: 56, image: "", optionType: "", addonsPreset: "" },
+{ id: "fried_onion_ring", category: "fried", name_vi: "Hành vòng chiên", name_zh: "洋蔥圈", name_en: "Onion Rings",
+  description_vi: "Hành rán", description_zh: "洋蔥圈", description_en: "Fried onion rings", price: 45, featured: false, available: true, sortOrder: 57, image: "", optionType: "", addonsPreset: "" },
+ 
+{ id: "vn_spring_roll", category: "vietnamese_fried", name_vi: "Nem rán Việt Nam (3 cái)", name_zh: "炸春捲（3個）",
+  name_en: "Vietnamese Fried Spring Rolls (3 pcs)", description_vi: "Nem rán 3 cái", description_zh: "炸春捲三個",
+  description_en: "Three Vietnamese fried spring rolls", price: 120, featured: false, available: true,
+  sortOrder: 60, image: "", optionType: "", addonsPreset: "" },
+{ id: "vn_skewer", category: "vietnamese_fried", name_vi: "Xiên bẩn", name_zh: "越式炸串", name_en: "Vietnamese Fried Skewers", description_vi: "Xiên ăn vặt Việt Nam", description_zh: "越式炸串", description_en: "Vietnamese street-style fried skewers", price: 100, featured: false, available: true, sortOrder: 61, image: "",
+  optionType: "", addonsPreset: "" }
+]
 };
 
 function readJson(file, fallback) {
@@ -625,6 +606,7 @@ app.get("/api/config", (req, res) => {
 app.get("/api/menu", (req, res) => {
   const menuData = getMenuData();
   const items = menuData.items
+    .filter((item) => item.deleted !== true)
     .map(normalizeItemForOldFrontend)
     .sort((a, b) => Number(a.sortOrder || a.sort || 999) - Number(b.sortOrder || b.sort || 999));
 
@@ -657,6 +639,84 @@ app.get("/api/menu-full", (req, res) => {
     settings: getSettings()
   });
 });
+
+function formatOrderMessage(order) {
+  const lines = [];
+ 
+  lines.push(`🧾 Đơn mới bàn ${safeText(order.table, "-")}`);
+ 
+  const items = Array.isArray(order.items) ? order.items : [];
+ 
+  items.forEach((item) => {
+    const qty = Number(item.qty || 1);
+    const name =
+      item.name_vi ||
+      item.name ||
+      item.name_en ||
+      item.name_zh ||
+      "Món";
+ 
+    const price = Number(item.price || 0);
+    const subtotal = Number(item.subtotal || item.lineTotal || price * qty || 0);
+ 
+    lines.push(`${name} x${qty} - ${subtotal} NT$`);
+ 
+    if (item.optionText) {
+      lines.push(`  • Chọn: ${item.optionText}`);
+    }
+ 
+    if (item.selectedOptions) {
+      if (item.selectedOptions.phoType) {
+        lines.push(`  • Phở: ${item.selectedOptions.phoType}`);
+      }
+      if (item.selectedOptions.riceSpicy) {
+        lines.push(`  • Cay: ${item.selectedOptions.riceSpicy}`);
+      }
+    }
+ 
+    if (Array.isArray(item.optionLabels) && item.optionLabels.length > 0) {
+      item.optionLabels.forEach((opt) => {
+        const group = opt.group || opt.label || "Option";
+        const value = opt.value || opt.name || "";
+        lines.push(`  • ${group}: ${value}`);
+      });
+    }
+ 
+    if (Array.isArray(item.addons) && item.addons.length > 0) {
+      item.addons.forEach((addon) => {
+        const addonName =
+          addon.name_vi ||
+          addon.name ||
+          addon.name_en ||
+          addon.name_zh ||
+          "Món thêm";
+ 
+        const addonQty = Number(addon.qty || 1);
+        const addonPrice = Number(addon.price || 0);
+ 
+        lines.push(`  + ${addonName} x${addonQty} - ${addonPrice} NT$`);
+      });
+    }
+ 
+    if (item.note || item.itemNote) {
+      lines.push(`  📝 Ghi chú món: ${item.note || item.itemNote}`);
+    }
+  });
+ 
+  if (Array.isArray(order.noIngredients) && order.noIngredients.length > 0) {
+    lines.push("");
+    lines.push(`🚫 Không: ${order.noIngredients.join(", ")}`);
+  }
+ 
+  if (order.customerNote || order.note) {
+    lines.push(`📝 Ghi chú: ${order.customerNote || order.note}`);
+  }
+ 
+  lines.push("");
+  lines.push(`💰 Tổng: ${Number(order.total || 0)} NT$`);
+ 
+  return lines.join("\n");
+}
 
 app.post("/order", async (req, res) => {
   try {
@@ -698,7 +758,7 @@ app.post("/order", async (req, res) => {
     writeJson(ORDERS_FILE, orders);
 
     try {
-      await sendTelegram(formatOrderMessage(orderRecord));
+      await sendTelegram(buildOrderMessageForTelegram(orderRecord));
     } catch (error) {
       console.log("TELEGRAM ORDER ERROR:", error.message);
     }
@@ -848,10 +908,56 @@ app.put("/api/admin/item/:id", checkAdmin, (req, res) => {
 app.delete("/api/admin/item/:id", checkAdmin, (req, res) => {
   const data = getMenuData();
 
-  data.items = data.items.filter((item) => item.id !== req.params.id);
+  data.items = data.items.map((item) =>
+    item.id === req.params.id
+      ? { ...item, deleted: true, deletedAt: new Date().toISOString() }
+      : item
+  );
 
   saveMenuData(data);
-  res.json({ success: true });
+  res.json({ success: true, archived: true });
+});
+
+app.get("/api/admin/items/trash", checkAdmin, (req, res) => {
+  const data = getMenuData();
+  const trash = data.items.filter((item) => item.deleted === true);
+  res.json({ success: true, items: trash });
+});
+
+app.post("/api/admin/item/:id/restore", checkAdmin, (req, res) => {
+  const data = getMenuData();
+  let restored = false;
+
+  data.items = data.items.map((item) => {
+    if (item.id === req.params.id && item.deleted === true) {
+      restored = true;
+      const next = { ...item, deleted: false };
+      delete next.deletedAt;
+      return next;
+    }
+    return item;
+  });
+
+  if (!restored) {
+    return res.status(404).json({ success: false, message: "Item not found in trash" });
+  }
+
+  saveMenuData(data);
+  res.json({ success: true, restored: true });
+});
+
+app.delete("/api/admin/item/:id/permanent", checkAdmin, (req, res) => {
+  const data = getMenuData();
+  const before = data.items.length;
+
+  data.items = data.items.filter((item) => item.id !== req.params.id);
+
+  if (data.items.length === before) {
+    return res.status(404).json({ success: false, message: "Item not found" });
+  }
+
+  saveMenuData(data);
+  res.json({ success: true, permanentlyDeleted: true });
 });
 
 app.put("/api/admin/addons", checkAdmin, (req, res) => {
