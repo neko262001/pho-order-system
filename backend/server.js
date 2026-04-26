@@ -758,7 +758,7 @@ app.post("/order", async (req, res) => {
     writeJson(ORDERS_FILE, orders);
 
     try {
-      await sendTelegram(buildOrderMessageForTelegram(orderRecord));
+      await sendTelegram(formatOrderMessage(orderRecord));
     } catch (error) {
       console.log("TELEGRAM ORDER ERROR:", error.message);
     }
